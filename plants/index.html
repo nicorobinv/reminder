@@ -719,7 +719,11 @@ function buildTasks(data, env, states, today) {
     var sp = SPECIES[p.species], spot = data.spots[p.spotId], st = states[p.id];
     if (!sp || !spot || spot.outdoor) return;
     if (sp.mist && !(latest && latest.hum >= 70 && daysBetween(latest.date, today) <= 1)) {
-      tasks.push({ key: 'mist:' + p.id, kind: 'toggle', title: p.name + ' · 엽수', sub: '잎 앞뒤에 분무 · 가능하면 매일, 못 해도 주 2~3회', done: taskDone(data, today, 'mist:' + p.id) });
+      var dryDay = !!(latest && daysBetween(latest.date, today) <= 1 && latest.hum <= 40);
+      tasks.push({ key: 'mist:' + p.id, kind: 'toggle', urgent: dryDay,
+        title: p.name + ' · 엽수' + (dryDay ? ' (오늘은 꼭)' : ''),
+        sub: dryDay ? '건조해요(습도 ' + latest.hum + '%) — 아침에 잎 앞뒤로 물이 맺힐 정도로 분무' : '잎 앞뒤에 분무 · 가능하면 매일, 못 해도 주 2~3회',
+        done: taskDone(data, today, 'mist:' + p.id) });
     }
     if (sp.nightBlind && st.ctx.coffeeWinter) {
       tasks.push({ key: 'blind:' + p.id, kind: 'toggle', title: p.name + ' · 밤 블라인드 닫기', sub: '창가 냉기 대책', done: taskDone(data, today, 'blind:' + p.id) });
@@ -1134,7 +1138,7 @@ function tasksCard(tasks) {
   var done = tasks.filter(function (t) { return t.done; }).length;
   var h = '<section class="card" aria-labelledby="td-t" style="gap:6px"><div class="card-head" style="padding-bottom:6px"><h2 id="td-t">오늘 할 일</h2><span class="small muted">' + tasks.length + '개 중 ' + done + '개 완료</span></div>';
   tasks.forEach(function (t) {
-    h += '<div class="task' + (t.done ? ' done' : '') + '"><div class="t"><b>' + esc(t.title) + '</b><span class="s13 muted">' + esc(t.sub) + '</span></div>';
+    h += '<div class="task' + (t.done ? ' done' : '') + '"><div class="t"><b>' + (t.urgent && !t.done ? '<span class="tag caution" style="margin-right:6px">건조</span>' : '') + esc(t.title) + '</b><span class="s13 muted">' + esc(t.sub) + '</span></div>';
     if (t.kind === 'reading') h += t.done ? '<span class="donemark">완료</span>' : '<button type="button" class="btn primary" data-act="focus-reading">입력하기</button>';
     else if (t.kind === 'check') h += t.done ? '<span class="donemark">확인함</span>' : '<a class="btn primary" href="#/check/' + encodeURIComponent(t.plantId) + '">흙 확인</a>';
     else {
