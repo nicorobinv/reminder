@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F4F6F1">
-<title>우리 방 식물</title>
+<title>플랜츠</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 58V30' stroke='%232F6B45' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M32 34C16 34 10 22 10 10c14 0 22 8 22 24zM32 30c0-14 8-22 22-22 0 14-8 22-22 22z' fill='%234F8A62'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1043,7 +1043,7 @@ function syncStatusLong() {
 function pageHome(all, today) {
   var plants = plantsSorted(DATA);
   var h = '<div class="wrap">';
-  h += '<header class="top"><div><h1>우리 방 식물</h1><p class="s13 muted" style="margin:4px 0 0">' + longDate(today) + ' · ' + plants.length + '그루 관리 중</p></div>' +
+  h += '<header class="top"><div><h1>플랜츠</h1><p class="s13 muted" style="margin:4px 0 0">' + longDate(today) + ' · ' + plants.length + '그루 관리 중</p></div>' +
     '<div class="chips"><span class="chip green">계절: ' + SEASON_LABEL[seasonOf(today)] + ' · ' + nextSeasonNote(today) + '</span>' +
     '<a href="#/settings" class="chip" data-sync-chip style="text-decoration:none">' + syncChipText() + '</a>' +
     '<a href="' + esc(safeUrl(DATA.settings.reminderUrl)) + '" class="btn small">리마인더</a>' +
