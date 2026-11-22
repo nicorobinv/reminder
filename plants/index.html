@@ -1,0 +1,1820 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src https://api.github.com https://api.open-meteo.com; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F4F6F1">
+<title>우리 방 식물</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 58V30' stroke='%232F6B45' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M32 34C16 34 10 22 10 10c14 0 22 8 22 24zM32 30c0-14 8-22 22-22 0 14-8 22-22 22z' fill='%234F8A62'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F6F1;--card:#FFFFFF;--line:#E1E6DC;--line2:#EEF1EB;--ink:#1E2A22;--ink2:#3E4C43;--mute:#56655B;--green:#2F6B45;--green-d:#1F4D31;--green-bg:#E3EFE6;--green-t:#24553A;--soft:#EEF3EA;--amber-bg:#FBEFD5;--amber-t:#8A5300;--rust-bg:#FBE4DA;--rust-t:#9A3412;--blue-bg:#E2EDF7;--blue-t:#1D4F7A;--field:#FBFCFA;--fline:#CFD6CA}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--green)}a:hover{color:var(--green-d)}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 20px 64px;display:flex;flex-direction:column;gap:22px}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h2{margin:0;font-size:17px;font-weight:700}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.muted{color:var(--mute)}.small{font-size:12px}.s13{font-size:13px}
+.f1{flex:1 1 320px}.f2{flex:2 1 420px}
+header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+header.top h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.01em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px;white-space:nowrap}
+.chip.green{color:var(--green-t);background:var(--green-bg);border-color:transparent;font-weight:500}
+.chip.soft{color:#2F5A3E;background:var(--soft);border-color:transparent}
+.chip.warn{color:var(--rust-t);background:var(--rust-bg);border-color:transparent;font-weight:700}
+button.chip{cursor:pointer;min-height:36px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:500;border-radius:10px;padding:9px 16px;min-height:44px;cursor:pointer;border:1px solid var(--fline);background:#fff;color:var(--ink);text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:#9FB0A4;color:var(--ink)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
+.btn.primary:hover{background:var(--green-d);color:#fff}
+.btn.danger{color:var(--rust-t);border-color:#E7B9A6}
+.btn.small{min-height:36px;padding:6px 12px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.linkbtn{background:none;border:none;color:var(--green);cursor:pointer;padding:8px 0;min-height:40px;font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:3px}
+.fields{display:flex;gap:12px;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:6px;flex:1 1 100px;min-width:0}
+.field label,.lbl{font-size:13px;font-weight:500;color:var(--ink2)}
+.field input,.field select,.field textarea,.inp{padding:10px 12px;min-height:44px;border:1px solid var(--fline);border-radius:10px;background:var(--field);width:100%}
+.field input.big{font-size:18px;font-weight:700}
+.field textarea{min-height:160px;line-height:1.6;resize:vertical}
+.check{display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px}
+.check input{width:22px;height:22px;accent-color:var(--green);margin:0;flex:none}
+.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.stat b{font-size:20px}
+.alerts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.alerts li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55}
+.tag{flex:none;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px}
+.tag.ok{color:var(--green-t);background:var(--green-bg)}
+.tag.info{color:var(--blue-t);background:var(--blue-bg)}
+.tag.caution{color:var(--amber-t);background:var(--amber-bg)}
+.tag.danger{color:var(--rust-t);background:var(--rust-bg)}
+.task{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line2);flex-wrap:wrap}
+.task .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.task .t b{font-size:15px}
+.task.done .t b{color:var(--mute);text-decoration:line-through}
+.donemark{font-size:13px;font-weight:700;color:var(--green-t);background:var(--green-bg);padding:8px 12px;border-radius:999px}
+.spot-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.spot-head h3{margin:0;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.pcard{text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.pcard:hover{border-color:#9FB0A4;color:var(--ink)}
+.pcard .nm{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pcard .nm b{font-size:16px}
+.badge{flex:none;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.rule{align-self:flex-start;font-size:12px;color:#2F5A3E;background:var(--soft);border-radius:6px;padding:4px 8px}
+.gauge{height:8px;background:#E8ECE4;border-radius:999px;overflow:hidden}
+.gauge>i{display:block;height:100%;border-radius:999px}
+.kv{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--mute)}
+.mini{font-size:11px;font-weight:700;color:var(--blue-t);background:var(--blue-bg);padding:2px 6px;border-radius:6px}
+.banner{background:#fff;border:1px dashed #B7C4BA;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between;font-size:13px;line-height:1.6}
+.reason{background:#F7F9F5;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.reason ul{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:var(--ink2)}
+.big{font-size:40px;font-weight:700;line-height:1.1}
+.scale{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));height:12px;border-radius:999px;overflow:hidden}
+.scale-l{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));font-size:12px;color:var(--ink2)}
+dl.info{margin:0;display:grid;grid-template-columns:96px 1fr;row-gap:10px;column-gap:12px;font-size:14px}
+dl.info dt{color:var(--mute)}dl.info dd{margin:0}
+.unset{color:var(--amber-t)}
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:grid;grid-template-columns:52px 1fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line2);align-items:start;font-size:13px;line-height:1.6}
+.hist .d{font-weight:700;color:var(--ink2)}
+.x{background:none;border:none;color:var(--mute);cursor:pointer;min-width:36px;min-height:36px;border-radius:8px;font-size:16px}
+.x:hover{background:var(--bg);color:var(--rust-t)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{font-size:14px;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 16px;min-height:44px;cursor:pointer}
+.tab[aria-selected=true]{font-weight:700;color:#fff;background:var(--green);border-color:var(--green)}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;min-width:620px;border-collapse:collapse;font-size:14px;line-height:1.6}
+th,td{padding:12px 14px;text-align:left;vertical-align:top}
+thead tr{background:#F7F9F5}
+tbody tr{border-top:1px solid var(--line2)}
+tr.now{background:#F3F8F3}tr.now th{color:var(--green-t)}
+.paras p{margin:0 0 8px;font-size:14px;line-height:1.75}
+.trouble{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.trouble li{display:grid;grid-template-columns:minmax(140px,1fr) 2fr;gap:12px;padding:10px 0;border-top:1px solid var(--line2);font-size:14px;line-height:1.6}
+.trouble li b{font-weight:700}
+.note{border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.6}
+.note.danger{background:var(--rust-bg)}.note.caution{background:var(--amber-bg)}.note.info{background:var(--blue-bg)}.note.good{background:var(--green-bg)}.note.warn{background:var(--amber-bg)}
+.note b{display:block;font-size:15px;margin-bottom:2px}
+.note code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;background:rgba(255,255,255,.6);padding:1px 5px;border-radius:5px}
+.note.danger b{color:var(--rust-t)}.note.caution b,.note.warn b{color:var(--amber-t)}.note.info b{color:var(--blue-t)}.note.good b{color:var(--green-t)}
+footer.foot{font-size:12px;color:var(--mute);line-height:1.7;text-align:center;padding-top:8px}
+/* 오버레이 */
+#overlay:empty{display:none}
+.ov{position:fixed;inset:0;background:rgba(20,30,24,.42);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--bg);width:100%;max-width:520px;max-height:100%;display:flex;flex-direction:column;border-radius:16px 16px 0 0;overflow:hidden}
+.sheet-h{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.sheet-h b{font-size:16px}
+.sheet-b{flex:1 1 auto;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:18px}
+.sheet-f{flex:none;padding:12px 16px 18px;background:#fff;border-top:1px solid var(--line);display:flex;gap:10px}
+.sheet-f .btn{flex:1}
+.opt{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:56px;border-radius:12px;cursor:pointer;text-align:left;width:100%;border:1px solid var(--fline);background:#fff}
+.opt[aria-pressed=true]{border:2px solid var(--green);background:#EEF5EF}
+.opt .dot{flex:none;width:20px;height:20px;border-radius:999px;border:2px solid #9AA79E;display:flex;align-items:center;justify-content:center}
+.opt[aria-pressed=true] .dot{border-color:var(--green)}
+.opt[aria-pressed=true] .dot::after{content:'';width:10px;height:10px;border-radius:999px;background:var(--green)}
+.opt .ol{display:flex;flex-direction:column;gap:1px}.opt .ol b{font-size:15px}
+.pill{font-size:14px;padding:8px 14px;min-height:44px;border-radius:999px;cursor:pointer;border:1px solid var(--fline);background:#fff}
+.pill[aria-pressed=true]{border-color:var(--green);background:var(--green);color:#fff;font-weight:700}
+.step{display:flex;flex-direction:column;gap:10px}
+.step h3{margin:0;font-size:15px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:80;max-width:calc(100% - 32px);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.toast:empty{display:none}
+.spotlist{list-style:none;margin:0;padding:0}
+.spotlist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line2);font-size:14px}
+@media (min-width:700px){.ov{align-items:center;padding:24px}.sheet{border-radius:16px;max-height:92vh}}
+@media (max-width:520px){.wrap{padding:16px 14px 56px;gap:18px}header.top h1{font-size:22px}.big{font-size:34px}.trouble li{grid-template-columns:1fr;gap:2px}}
+
+</style>
+</head>
+<body>
+<div id="app"><div class="wrap"><p class="muted">불러오는 중…</p></div></div>
+<div id="overlay"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript><div class="wrap"><p>이 페이지는 JavaScript가 필요해요.</p></div></noscript>
+<script>
+/* 우리 방 식물 — 물 주기 관리 페이지 (한 파일 구성) */
+/* ===== 식물 종 정보 =====
+ * threshold(ctx): 남은 수분(%)이 이 값 이하가 되면 "흙 확인" 알림
+ * baseLoss: 기준 환경(22℃·습도 50%·여름 계수 1)에서 하루에 줄어드는 수분(%)
+ * topVerdict(ctx): "겉만 말랐어요"일 때 판정
+ * info: 기르는 법 기본 문구 (화면에서 수정 가능)
+ */
+var SPECIES = {
+  wilma: {
+    name: '윌마',
+    full: '골드크레스트 윌마',
+    latin: "Cupressus macrocarpa 'Wilma'",
+    baseLoss: 18,
+    moistWait: 2,
+    cold: null,
+    threshold: function () { return 40; },
+    rule: function () { return '겉흙이 마르면 흠뻑'; },
+    topVerdict: function () { return { action: 'water' }; },
+    info: {
+      feature: '골드크레스트의 왜성 품종으로, 레몬 향이 나는 밝은 황록색 잎이 1년 내내 유지돼요.\n해를 좋아하고 배수가 잘 되는 흙을 좋아해요.\n코니퍼 중에서는 추위에 약한 편이에요.',
+      water: '1년 내내 겉흙이 마르면 화분 밑으로 흘러나올 만큼 흠뻑 줘요.\n과습(뿌리 썩음)과 물부족 둘 다에 약해요. 날짜가 아니라 흙을 보고 주세요.\n겨울에 난방하는 실내는 생각보다 화분이 빨리 말라요.\n받침에 고인 물은 바로 버려요.',
+      light: '해가 잘 드는 곳이 좋아요. 빛이 극단적으로 부족하면 포기가 연약해져요.\n에어컨·히터 바람, 실외기 바람이 직접 닿는 곳은 피하세요.\n잎이 빽빽해 통풍이 안 되면 안쪽부터 갈색으로 변해요.',
+      temp: '장마~여름의 고온다습과 통풍 불량(무레, 蒸れ)에 약해요. 욕실 근처처럼 습기가 모이는 곳은 피하세요.\n실외: 최저기온 0℃ 이하가 이어지거나 흙이 얼 정도면 실내로 들여요.\n실내에선 가끔 엽수(잎에 분무)도 좋아요.',
+      seasons: '봄 | 겉흙이 마르면 흠뻑 | 해가 잘 드는 곳 | —\n장마~여름 | 겉흙이 마르면 흠뻑 | 통풍 확보, 무레 주의 | 습기가 모이는 곳 피하기\n가을 | 겉흙이 마르면 흠뻑 | 해가 잘 드는 곳 | —\n겨울 | 마른 정도를 확인하며 흠뻑 | 실외는 0℃ 이하가 이어지면 실내로 | 난방 실내는 빨리 마름, 가끔 엽수',
+      trouble: '안쪽(줄기 쪽)부터 갈색 → 고온다습·통풍 불량(무레). 통풍을 확보하고 습기 많은 곳에서 옮기기\n잎끝이 바삭바삭 → 물부족·건조. 잎이 노란색이라 변화가 잘 안 보이니 잎끝을 만져 확인\n흙이 젖어 있는데 시듦 → 뿌리 썩음 의심. 물을 멈추고 환기·자리 점검\n화분 밑으로 뿌리가 나옴 → 뿌리가 꽉 참. 뿌리 덩어리는 풀지 말고 한 치수 큰 화분으로',
+      safety: '확인된 자료가 없어요. 아이·반려동물이 먹지 않게 두는 게 안전해요.'
+    }
+  },
+
+  coffee: {
+    name: '커피나무',
+    full: '커피나무 (아라비카)',
+    latin: 'Coffea arabica',
+    baseLoss: 15,
+    moistWait: 2,
+    cold: { caution: 10, danger: 5 },
+    nightBlind: true,
+    threshold: function (ctx) {
+      if (ctx.coffeeWinter) return 18;
+      if (ctx.season === 'autumn') return 32;
+      return 40;
+    },
+    rule: function (ctx) {
+      if (ctx.coffeeWinter) return '겨울: 흙 속까지 완전히 마른 뒤';
+      if (ctx.season === 'autumn') return '가을: 겉흙 마르고 1~2일 뒤';
+      return '겉흙이 마르면 흠뻑';
+    },
+    topVerdict: function (ctx) {
+      if (ctx.coffeeWinter) return { action: 'wait', days: 3, why: '겨울(15℃ 미만)엔 흙 속까지 완전히 마른 뒤에 줘요. 3일 뒤 다시 확인할게요.' };
+      if (ctx.season === 'autumn') return { action: 'wait', days: 1, why: '가을엔 겉흙이 마르고 1~2일 뒤에 줘요. 내일 다시 확인할게요.' };
+      return { action: 'water' };
+    },
+    info: {
+      feature: '에티오피아 고원 원산의 상록수로, 광택 있는 짙은 녹색 잎이 특징이에요. 관엽식물로는 주로 아라비카종이 유통돼요.\n햇빛, 10℃ 이상, 배수가 잘 되는 흙 — 이 세 가지가 조건이에요.',
+      water: '봄~여름: 겉흙이 마르면 화분 밑으로 흘러나올 만큼 흠뻑.\n가을: 겉흙이 마르고 1~2일 뒤, 횟수를 서서히 줄이기.\n겨울: 15℃ 아래로 내려갈 무렵부터 줄이고, 흙 속까지 완전히 마른 뒤에.\n받침에 고인 물은 바로 버려요. 물은 따뜻한 날 아침에 주는 게 좋아요.',
+      light: '햇빛을 좋아하지만 한여름 직사광선은 잎이 타요. 여름엔 블라인드로 가려 주세요.\n갑자기 밝은 곳으로 옮기면 잎이 탈 수 있어요. 1~2주에 걸쳐 서서히 옮기세요.\n빛이 부족하면 웃자라요.',
+      temp: '10℃ 이상이면 안심, 5℃ 아래는 위험해요(잎이 떨어지거나 가지 끝이 마름).\n창가는 밤에 가장 차가워져요. 겨울엔 밤에 블라인드를 닫아 냉기를 막아 주세요.\n엽수는 해도 되지만 필수는 아니고, 겨울엔 기화열로 차가워질 수 있어 쉬는 게 무난해요.',
+      seasons: '봄~여름 | 겉흙이 마르면 흠뻑 | 한여름 직사광선 → 블라인드 | 받침 물 바로 버리기\n가을 | 겉흙이 마르고 1~2일 뒤, 서서히 줄이기 | 밤 기온 확인 시작 | —\n겨울 | 15℃ 아래부터 줄이고 흙 속까지 완전히 마른 뒤 | 10℃ 이상 유지, 밤엔 블라인드 | 엽수는 쉬기',
+      trouble: '잎이 떨어짐 → 추위·물부족·직사광선, 또는 급격한 온도 변화·찬바람·건조. 따뜻하고 안정된 자리로\n웃자라서 가늘어짐 → 빛 부족. 더 밝은 창가로\n잎이 처지거나 누렇거나 붉은 기 → 물 주는 빈도·비료 조절 필요\n흙이 젖어 있는데 시듦 → 뿌리 썩음 의심. 물을 멈추기',
+      safety: '확인된 자료가 없어요. 아이·반려동물이 먹지 않게 두는 게 안전해요.'
+    }
+  },
+
+  pilea: {
+    name: '필레아',
+    full: '필레아 페페로미오이데스',
+    latin: 'Pilea peperomioides',
+    baseLoss: 10,
+    moistWait: 3,
+    cold: { caution: 12, danger: 10 },
+    rotate: true,
+    threshold: function () { return 30; },
+    rule: function () { return '흙 위쪽 2/3가 마르면'; },
+    topVerdict: function () { return { action: 'wait', days: 2, why: '필레아는 흙 위쪽 2/3가 마른 뒤에 줘요. 겉만 마른 정도면 아직이에요. 2일 뒤 다시 확인할게요.' }; },
+    info: {
+      feature: '중국 원산으로, 동전처럼 둥근 잎이 특징이에요. Chinese money plant라고도 불려요.',
+      water: '흙 위쪽 2/3가 마른 뒤에 줘요.\n겨울엔 생장을 쉬어서 물이 덜 필요해요.\n받침에 고인 물은 1~2시간 안에 버려요. 오래 두면 뿌리가 썩어요.',
+      light: '밝은 간접광이 가장 좋아요. 직사광선은 잎을 태워요.\n남향 방이면 창에서 조금 떨어뜨리고, 특히 여름엔 직사광선을 피하세요.\n빛 쪽으로 기울어 자라니, 물 줄 때마다 화분을 1/4씩 돌려요.',
+      temp: '항상 10℃ 이상을 유지하고, 찬 외풍은 피하세요.\n난방으로 공기가 건조해지면 흙이 마르는 속도도 빨라져요.',
+      seasons: '봄~여름 | 흙 위쪽 2/3가 마르면 | 밝은 간접광, 한여름 직사광선 X | 물 줄 때 1/4 돌리기\n가을 | 흙 위쪽 2/3가 마르면, 서서히 줄이기 | 밤 기온 확인 | —\n겨울 | 더 말린 뒤, 횟수 줄이기 | 10℃ 이상, 찬 외풍 X | 물 줄 때 1/4 돌리기',
+      trouble: '잎이 축 처지고 생기 없음 → 물 과다 또는 부족. 흙을 확인해서 구분\n잎이 안쪽으로 말리거나 가장자리가 바삭 → 강한 햇빛 스트레스. 간접광으로\n갈색 반점 → 햇볕 화상 또는 비료 과다\n잎이 붉은 갈색으로 물듦 → 직사광선이 너무 강함\n잎이 휘고 말림 → 빛 부족',
+      safety: '확인된 자료가 없어요.'
+    }
+  },
+
+  zz: {
+    name: '금전수 젠지',
+    full: '금전수 젠지 (ZZ 플랜트)',
+    latin: "Zamioculcas zamiifolia 'Zenzi'",
+    baseLoss: 5,
+    moistWait: 5,
+    cold: { caution: 10, danger: 5 },
+    toxic: true,
+    threshold: function (ctx) { return ctx.season === 'winter' ? 8 : 12; },
+    rule: function () { return '흙이 완전히 마르면'; },
+    topVerdict: function (ctx) {
+      var d = ctx.season === 'winter' ? 7 : 4;
+      return { action: 'wait', days: d, why: '금전수는 흙이 완전히 마른 뒤에 줘요. 겉만 마른 정도면 아직이에요. ' + d + '일 뒤 다시 확인할게요.' };
+    },
+    info: {
+      feature: '동아프리카 원산. 감자 같은 뿌리줄기에 물을 저장해서 건조에 아주 강해요.\n어두운 방에서도 잘 자라요. 젠지(Zenzi)는 잎이 더 곱슬하고 촘촘한 품종이에요.',
+      water: '흙이 (거의) 완전히 마른 뒤에 흠뻑 줘요.\n겨울엔 휴면해서 생장이 멈춰요. 물 주는 횟수를 크게 줄이세요. 겨울 과습으로 인한 뿌리 썩음이 가장 흔한 실패예요.\n찬물보다 미지근한 물이 좋아요.',
+      light: '밝은 간접광이 가장 좋지만 어두운 곳도 견뎌요.\n직사광선을 오래 받으면 잎이 마르고 갈색으로 변할 수 있어요.',
+      temp: '습도에는 크게 민감하지 않아요.\n겨울엔 휴면하니 따뜻한 실내에 두고 물을 줄이세요.',
+      seasons: '봄~여름 | 흙이 완전히 마르면 흠뻑 | 밝은 간접광 | —\n가을 | 마르는 간격이 길어짐, 서서히 줄이기 | — | —\n겨울 | 휴면기, 크게 줄이기 (거의 완전히 마른 뒤) | 따뜻한 실내 | 겨울 과습 주의',
+      trouble: '줄기가 무르거나 누렇게 → 과습·뿌리 썩음 의심. 물을 멈추고 흙 말리기\n잎이 갈색으로 마름 → 직사광선 과다\n잎이 떨어지고 줄기만 남음 → 심한 물부족일 수 있어요. 뿌리줄기가 살아 있으면 물을 주면 회복 가능',
+      safety: '모든 부위에 물에 녹지 않는 수산칼슘(옥살산칼슘) 바늘 결정이 있어요. 씹거나 삼키면 바로 통증·화끈거림이 오고 입술·입·혀·목이 부을 수 있어요.\n대부분 심각하지 않지만, 드물게 목 안쪽이 부어 숨쉬기 어려울 수 있어요. 아이·반려동물 손이 닿지 않는 곳에 두세요.\n수액이 피부·눈에 닿으면 자극이 있을 수 있어요. 분갈이·가지치기 땐 장갑을 끼고 손을 씻으세요.\n먹었을 때: 입에 남은 걸 빼내고 헹구기. 억지로 토하게 하지 않기. 입술·혀가 붓거나 숨쉬기·삼키기가 어려우면 바로 병원.\n상담: 大阪中毒110番 072-727-2499 (365일 24시간) · つくば中毒110番 029-852-9999 (365일 9~21시) · 어린이 의료 전화상담 #8000 (휴일·야간)'
+    }
+  },
+
+  shinobu: {
+    name: '토키와시노부',
+    full: '토키와시노부 (トキワシノブ)',
+    latin: 'Humata tyermannii',
+    baseLoss: 16,
+    moistWait: 2,
+    cold: { caution: 10, danger: 5 },
+    mist: true,
+    threshold: function (ctx) { return ctx.cool ? 28 : 40; },
+    rule: function (ctx) { return ctx.cool ? '겨울: 겉흙 마르고 2~3일 뒤' : '겉흙이 마르면 흠뻑'; },
+    topVerdict: function (ctx) {
+      if (ctx.cool) return { action: 'wait', days: 2, why: '10℃ 아래에선 생장이 느려서 겉흙이 마르고 2~3일 뒤에 줘요. 2일 뒤 다시 확인할게요.' };
+      return { action: 'water' };
+    },
+    info: {
+      feature: '흰 털로 덮인 뿌리줄기가 흙 위를 기어가듯 자라는 상록 고사리예요. 원래 나무에 붙어 사는 착생 식물이에요.\n습기 있는 밝은 그늘을 좋아해요.',
+      water: '봄~가을: 겉흙이 마르면 화분 밑으로 흘러나올 만큼 흠뻑.\n10℃ 아래에선 생장이 느려지니, 겨울엔 겉흙이 마르고 2~3일 뒤에 줘요.\n받침에 고인 물은 버려요.',
+      light: '직사광선은 피하고, 레이스 커튼 너머의 밝은 그늘이 좋아요.\n직사광선을 받고 기온까지 높으면 잎이 타요.\n냉난방 바람이 직접 닿지 않게 하세요.',
+      temp: '공기 중 습도를 좋아해요. 엽수(잎 앞뒤에 분무)를 하루 1번 정도 해 주세요. 비 오는 날·습한 날은 생략.\n다만 무레(습기로 인한 통풍 불량)에 약하니 바람은 통하게 해 주세요.\n실내에선 10℃ 이상이면 안심, 5℃ 아래면 잎이 상할 수 있어요.',
+      seasons: '봄~가을 | 겉흙이 마르면 흠뻑 | 밝은 그늘, 직사광선 X | 엽수 매일\n장마 | 겉흙이 마르면 흠뻑 | 통풍 확보 | 습한 날은 엽수 생략\n겨울 | 겉흙이 마르고 2~3일 뒤 | 10℃ 이상 | 난방으로 건조하면 엽수',
+      trouble: '잎끝·가장자리가 갈색으로 바삭 → 습도 부족·물부족. 엽수 늘리기\n잎이 누렇게 시들고 줄기가 무름 → 과습. 물 간격 늘리기\n잎이 탐 → 직사광선. 밝은 그늘로',
+      safety: '확인된 자료가 없어요.'
+    }
+  }
+};
+
+var INFO_TABS = [
+  { key: 'feature', label: '특징' },
+  { key: 'water', label: '물 주기' },
+  { key: 'light', label: '빛·장소' },
+  { key: 'temp', label: '온도·습도' },
+  { key: 'seasons', label: '계절별' },
+  { key: 'trouble', label: '이상 증상' },
+  { key: 'safety', label: '안전' }
+];
+
+/* ===== 날짜 유틸 ===== */
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+function todayStr(now) {
+  var d = now || new Date();
+  return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+}
+function parseDay(s) {
+  var p = s.split('-');
+  return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+}
+function fmtDay(ms) {
+  var d = new Date(ms);
+  return d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate());
+}
+function addDays(s, n) { return fmtDay(parseDay(s) + n * 86400000); }
+function daysBetween(a, b) { return Math.round((parseDay(b) - parseDay(a)) / 86400000); }
+var WEEK = ['일', '월', '화', '수', '목', '금', '토'];
+function weekday(s) { return WEEK[new Date(parseDay(s)).getUTCDay()]; }
+function shortDate(s) {
+  var p = s.split('-');
+  return (+p[1]) + '/' + (+p[2]);
+}
+function longDate(s) {
+  var p = s.split('-');
+  return (+p[1]) + '월 ' + (+p[2]) + '일 (' + weekday(s) + ')';
+}
+function relDay(s, today) {
+  var n = daysBetween(today, s);
+  if (n <= 0) return '오늘';
+  if (n === 1) return '내일';
+  if (n === 2) return '모레';
+  return shortDate(s) + ' (' + weekday(s) + ')';
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function uid(prefix) { return (prefix || 'id') + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+/* ===== 계절 (요코하마 기준) ===== */
+var SEASON_LABEL = { spring: '봄', rainy: '장마', summer: '여름', autumn: '가을', winter: '겨울' };
+function seasonOf(s) {
+  var p = s.split('-'), m = +p[1], d = +p[2];
+  if (m >= 3 && m <= 5) return 'spring';
+  if (m === 6 || (m === 7 && d <= 15)) return 'rainy';
+  if (m <= 9 && m >= 7) return 'summer';
+  if (m === 10 || m === 11) return 'autumn';
+  return 'winter';
+}
+function nextSeasonNote(s) {
+  var se = seasonOf(s);
+  return { spring: '6월부터 장마 모드', rainy: '7월 중순부터 여름 모드', summer: '10월부터 가을 모드', autumn: '12월부터 겨울 모드', winter: '3월부터 봄 모드' }[se];
+}
+var SEASON_F = { spring: 0.9, rainy: 0.75, summer: 1.0, autumn: 0.75, winter: 0.55 };
+// 요코하마 월별 기준 증발산량(mm/일)·평균기온 — 날씨 데이터가 없을 때만 사용
+var ET0_MONTH = [1.2, 1.6, 2.3, 3.2, 3.8, 3.4, 4.2, 4.2, 3.1, 2.2, 1.5, 1.1];
+var TEMP_MONTH = [6, 6.5, 9.5, 14.5, 19, 22, 26, 27.5, 24, 18.5, 13.5, 8.5];
+function monthIdx(s) { return +s.split('-')[1] - 1; }
+
+/* ===== 초기 데이터 ===== */
+function seedData(today) {
+  // updatedAt을 아주 오래된 값(1)으로 두어, 다른 기기에서 고친 내용이 동기화 때 항상 이기게 함
+  var t = 1;
+  function spot(id, o, order) { o.id = id; o.order = order; o.updatedAt = t; return o; }
+  function plant(id, name, species, spotId, order, extra) {
+    var o = { id: id, name: name, species: species, spotId: spotId, created: today, startMoisture: 60,
+      potSize: null, potMaterial: null, base: null, sustee: false, order: order, updatedAt: t };
+    if (extra) for (var k in extra) o[k] = extra[k];
+    return o;
+  }
+  return {
+    schema: 1,
+    settings: { lat: 35.414, lon: 139.505, placeName: '요코하마 이즈미구', thermoSpotId: 's_shelf', updatedAt: t },
+    spots: {
+      s_shelf: spot('s_shelf', { name: '오른쪽 선반', outdoor: false, sun: 'high', rain: false, vent: 'normal', moistSource: false, summerShade: true }, 1),
+      s_monitor: spot('s_monitor', { name: '모니터 오른쪽', outdoor: false, sun: 'mid', rain: false, vent: 'normal', moistSource: false, summerShade: false }, 2),
+      s_shade: spot('s_shade', { name: '밝은 그늘', outdoor: false, sun: 'low', rain: false, vent: 'normal', moistSource: false, summerShade: false }, 3),
+      s_yard: spot('s_yard', { name: '마당', outdoor: true, sun: 'low', rain: true, vent: 'good', moistSource: false, summerShade: false }, 4)
+    },
+    plants: {
+      p_w1: plant('p_w1', '윌마 1', 'wilma', 's_shelf', 1),
+      p_w2: plant('p_w2', '윌마 2', 'wilma', 's_shelf', 2),
+      p_w3: plant('p_w3', '윌마 3', 'wilma', 's_shelf', 3),
+      p_w4: plant('p_w4', '윌마 4', 'wilma', 's_shelf', 4),
+      p_coffee: plant('p_coffee', '커피나무', 'coffee', 's_shelf', 5),
+      p_pilea: plant('p_pilea', '필레아', 'pilea', 's_monitor', 6),
+      p_zz: plant('p_zz', '금전수 젠지', 'zz', 's_shade', 7),
+      p_shinobu: plant('p_shinobu', '토키와시노부', 'shinobu', 's_shade', 8),
+      p_w5: plant('p_w5', '윌마 5', 'wilma', 's_yard', 9, { base: 'stand' }),
+      p_w6: plant('p_w6', '윌마 6', 'wilma', 's_yard', 10, { base: 'stand' })
+    },
+    logs: {},
+    readings: {},
+    tasks: {},
+    info: {}
+  };
+}
+
+/* ===== 목록 헬퍼 ===== */
+function live(map) {
+  var out = [];
+  for (var k in map) if (map[k] && !map[k].deleted) out.push(map[k]);
+  return out;
+}
+function byOrder(a, b) { return (a.order || 0) - (b.order || 0) || String(a.name).localeCompare(String(b.name)); }
+function plantsSorted(data) {
+  var spotOrder = {};
+  live(data.spots).forEach(function (s) { spotOrder[s.id] = s.order || 0; });
+  return live(data.plants).sort(function (a, b) {
+    return (spotOrder[a.spotId] || 99) - (spotOrder[b.spotId] || 99) || byOrder(a, b);
+  });
+}
+function plantLogs(data, plantId) {
+  return live(data.logs).filter(function (l) { return l.plantId === plantId; }).sort(function (a, b) {
+    return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.time || '') < (b.time || '') ? -1 : (a.time || '') > (b.time || '') ? 1 : 0;
+  });
+}
+function infoText(data, species, key) {
+  var o = data.info && data.info[species + '.' + key];
+  if (o && !o.deleted && typeof o.text === 'string') return o.text;
+  return SPECIES[species] ? SPECIES[species].info[key] || '' : '';
+}
+
+/* ===== 환경 ===== */
+function buildEnv(data, weather) {
+  var dates = Object.keys(data.readings || {}).filter(function (k) { return !data.readings[k].deleted; }).sort();
+  var wdays = (weather && weather.days) || {};
+  return {
+    dates: dates,
+    readingAt: function (d) {
+      var lo = 0, hi = dates.length - 1, ans = -1;
+      while (lo <= hi) { var mid = (lo + hi) >> 1; if (dates[mid] <= d) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
+      return ans >= 0 ? data.readings[dates[ans]] : null;
+    },
+    latest: function (today) {
+      for (var i = dates.length - 1; i >= 0; i--) if (dates[i] <= today) return data.readings[dates[i]];
+      return null;
+    },
+    weatherAt: function (d) { return wdays[d] || null; },
+    hasWeather: Object.keys(wdays).length > 0
+  };
+}
+function vpdFactor(t, rh) {
+  var es = 0.6108 * Math.exp(17.27 * t / (t + 237.3));
+  var vpd = es * (1 - clamp(rh, 5, 100) / 100);
+  return clamp(Math.pow(Math.max(vpd, 0.01) / 1.32, 0.7), 0.25, 2.2);
+}
+function spotTemp(spot, d, env) {
+  if (spot && spot.outdoor) {
+    var w = env.weatherAt(d);
+    if (w && w.tmax != null && w.tmin != null) return (w.tmax + w.tmin) / 2;
+    return TEMP_MONTH[monthIdx(d)];
+  }
+  var r = env.readingAt(d);
+  return r ? r.temp : 20;
+}
+function ctxFor(spot, d, env) {
+  var season = seasonOf(d);
+  var t = spotTemp(spot, d, env);
+  return { season: season, temp: t, coffeeWinter: season === 'winter' || t < 15, cool: season === 'winter' || t < 10 };
+}
+function potFactor(p) {
+  var f = 1;
+  if (p.potSize != null && p.potSize !== '') {
+    var s = +p.potSize;
+    f *= s < 10 ? 1.3 : s < 15 ? 1.1 : s < 20 ? 1.0 : s < 26 ? 0.85 : 0.75;
+  }
+  if (p.potMaterial === 'clay') f *= 1.25;
+  else if (p.potMaterial === 'ceramic') f *= 0.95;
+  if (p.base === 'stand') f *= 1.05;
+  return f;
+}
+var SUN_F = { high: 1.15, mid: 1.0, low: 0.85 };
+var VENT_F = { good: 1.05, normal: 1.0, poor: 0.85 };
+function dailyLoss(plant, spot, d, k, env) {
+  var sp = SPECIES[plant.species] || SPECIES.wilma;
+  var season = seasonOf(d);
+  var f;
+  if (spot && spot.outdoor) {
+    var w = env.weatherAt(d);
+    var et0 = w && w.et0 != null ? w.et0 : ET0_MONTH[monthIdx(d)];
+    f = clamp(et0 / 2.5, 0.25, 2.5);
+  } else {
+    var r = env.readingAt(d) || { temp: 20, hum: 55 };
+    f = vpdFactor(r.temp, r.hum) * SEASON_F[season];
+    if (season === 'summer' && spot && spot.summerShade) f *= 0.9;
+    f *= VENT_F[(spot && spot.vent) || 'normal'] || 1;
+  }
+  f *= SUN_F[(spot && spot.sun) || 'mid'] || 1;
+  return sp.baseLoss * f * potFactor(plant) * k;
+}
+function applyRain(M, spot, d, env) {
+  if (!spot || !spot.outdoor || !spot.rain) return { M: M, rained: false };
+  var w = env.weatherAt(d);
+  if (!w || w.precip == null) return { M: M, rained: false };
+  if (w.precip >= 5) return { M: 100, rained: true };
+  if (w.precip >= 1) return { M: Math.min(100, M + w.precip * 12), rained: false };
+  return { M: M, rained: false };
+}
+function adjustK(k, result, M, T) {
+  if (result === 'moist') { if (M <= T + 10) k *= 0.85; }
+  else if (result === 'top') { if (M > T + 25) k *= 1.1; }
+  else if (result === 'dry') { k *= M > T ? 1.2 : 1.08; }
+  return clamp(k, 0.4, 2.5);
+}
+
+/* ===== 시뮬레이션: 기록을 처음부터 다시 계산 ===== */
+function simulate(plant, data, env, today) {
+  var sp = SPECIES[plant.species] || SPECIES.wilma;
+  var spot = data.spots[plant.spotId];
+  var logs = plantLogs(data, plant.id).filter(function (l) { return l.date <= today; });
+  var start = plant.created || today;
+  if (logs.length && logs[0].date < start) start = logs[0].date;
+  if (start > today) start = today;
+  var M = plant.startMoisture != null ? +plant.startMoisture : 60;
+  var k = 1, snooze = null, lastWater = null, lastRain = null, checks = 0, checkedToday = false, lastCheck = null;
+  var i = 0;
+  for (var d = start; ; d = addDays(d, 1)) {
+    while (i < logs.length && logs[i].date === d) {
+      var l = logs[i++];
+      if (l.type === 'water') { M = 100; lastWater = d; snooze = null; if (d === today) checkedToday = true; }
+      else if (l.type === 'check') {
+        var T0 = sp.threshold(ctxFor(spot, d, env));
+        k = adjustK(k, l.result, M, T0);
+        checks++;
+        lastCheck = l;
+        if (d === today) checkedToday = true;
+        if (l.action === 'water') { M = 100; lastWater = d; snooze = null; }
+        else {
+          M = l.result === 'moist' ? Math.max(M, T0 + 15) : Math.max(M, T0 + 1);
+          snooze = addDays(d, l.waitDays || sp.moistWait);
+        }
+      }
+    }
+    if (d >= today) break;
+    var rr = applyRain(M, spot, d, env);
+    M = rr.M;
+    if (rr.rained) { lastRain = d; snooze = null; }
+    M = Math.max(0, M - dailyLoss(plant, spot, d, k, env));
+  }
+  var ctx = ctxFor(spot, today, env);
+  var T = sp.threshold(ctx);
+  var pm = M, next = null, nsnooze = snooze;
+  for (var j = 0; j < 150; j++) {
+    var dd = addDays(today, j);
+    if (!(nsnooze && dd < nsnooze) && pm <= sp.threshold(ctxFor(spot, dd, env))) { next = dd; break; }
+    var r2 = applyRain(pm, spot, dd, env);
+    pm = r2.M;
+    if (r2.rained) nsnooze = null;
+    pm = Math.max(0, pm - dailyLoss(plant, spot, dd, k, env));
+  }
+  if (!next) next = addDays(today, 150);
+  return {
+    M: M, k: k, T: T, next: next, due: next <= today, lastWater: lastWater, lastRain: lastRain,
+    snooze: snooze, checks: checks, checkedToday: checkedToday, lastCheck: lastCheck,
+    rule: sp.rule(ctx), ctx: ctx
+  };
+}
+function statusOf(st, today) {
+  if (st.due) return { key: 'due', label: '오늘 확인', bg: '#FBE4DA', fg: '#9A3412', bar: '#9A3412' };
+  if (daysBetween(today, st.next) <= 2) return { key: 'soon', label: '곧 확인', bg: '#FBEFD5', fg: '#8A5300', bar: '#E0A030' };
+  return { key: 'ok', label: '여유', bg: '#E3EFE6', fg: '#24553A', bar: '#4F8A62' };
+}
+
+/* ===== 흙 확인 판정 ===== */
+var LEAF_OPTIONS = [
+  { id: 'normal', label: '평소와 같음' },
+  { id: 'tip', label: '잎끝이 갈색·바삭' },
+  { id: 'droop', label: '처지거나 시듦' },
+  { id: 'yellow', label: '누렇게 변하거나 떨어짐' }
+];
+function verdictFor(plant, result, leaf, st, env, today, opts) {
+  var sp = SPECIES[plant.species] || SPECIES.wilma;
+  var ctx = st.ctx;
+  var v = { action: 'wait', waitDays: sp.moistWait, tone: 'info', title: '', body: '', warns: [] };
+  if (result === 'moist') {
+    v.waitDays = plant.species === 'coffee' && ctx.coffeeWinter ? 3 : sp.moistWait;
+    v.tone = 'info';
+    v.title = '물 주지 마세요';
+    v.body = v.waitDays + '일 뒤에 다시 확인할게요.' + (st.M <= st.T + 10 ? ' 이 화분은 마르는 속도를 조금 느리게 보정해요.' : '');
+  } else if (result === 'top') {
+    // 사스티 흰색은 뿌리 쪽까지 마른 신호라, 필레아는 바로 물 주기
+    var tv = opts && opts.sustee && plant.species === 'pilea' ? { action: 'water' } : sp.topVerdict(ctx);
+    if (tv.action === 'water') {
+      v.action = 'water'; v.tone = 'good'; v.title = '지금 물 주세요';
+      v.body = '화분 밑으로 흘러나올 때까지 흠뻑. 다음 확인일을 새로 계산해요.' + (st.M > st.T + 25 ? ' 예상보다 빨리 말라서 마르는 속도를 빠르게 보정해요.' : '');
+    } else {
+      v.action = 'wait'; v.waitDays = tv.days; v.tone = 'info'; v.title = '아직 기다려요'; v.body = tv.why;
+    }
+  } else {
+    v.action = 'water';
+    var target = plant.species === 'zz' || plant.species === 'pilea';
+    if (target) {
+      v.tone = 'good'; v.title = '지금 물 주세요';
+      v.body = '딱 좋은 타이밍이에요. 화분 밑으로 흘러나올 때까지 흠뻑.' + (st.M > st.T ? ' 예상보다 빨리 말라서 마르는 속도를 빠르게 보정해요.' : '');
+    } else {
+      v.tone = 'warn'; v.title = '지금 물 주세요 · 조금 늦었어요';
+      v.body = '생각보다 빨리 말랐어요. 다음부터 확인을 앞당길게요.';
+    }
+  }
+  var latest = env.latest(today);
+  var hum = latest ? latest.hum : null;
+  if (result === 'moist' && (leaf === 'droop' || leaf === 'yellow')) {
+    v.warns.push({ level: 'danger', title: '뿌리 썩음 의심', body: '흙이 젖어 있는데 잎이 처지거나 누래요. 물은 멈추고, 환기와 자리(습기원 근처인지)를 먼저 점검하세요.' });
+  } else if (result !== 'moist' && leaf === 'droop') {
+    v.warns.push({ level: 'caution', title: '물부족으로 처진 것 같아요', body: '흠뻑 주고 하루 이틀 지켜보세요. 그래도 회복되지 않으면 뿌리 상태를 의심해 보세요.' });
+  }
+  if (leaf === 'tip') {
+    var noMist = plant.species === 'coffee' && ctx.coffeeWinter;
+    if (hum != null && hum <= 45) {
+      v.warns.push({ level: 'caution', title: '공기가 건조해요 (습도 ' + hum + '%)', body: '히터 바람이 직접 닿지 않는지 확인하세요.' + (noMist ? ' 커피나무는 겨울엔 엽수를 쉬는 게 무난해요.' : ' 엽수(잎에 분무)도 도움이 돼요.') });
+    } else {
+      v.warns.push({ level: 'caution', title: '잎끝이 갈색·바삭', body: '물부족이나 건조 신호일 수 있어요. 흙이 바싹 마른 상태로 오래 두지 않게 지켜봐 주세요.' });
+    }
+  }
+  if (leaf === 'yellow' && result !== 'moist') {
+    if (plant.species === 'coffee') v.warns.push({ level: 'caution', title: '잎이 누렇거나 떨어져요', body: '커피나무는 추위·급격한 온도 변화·찬바람에 잎을 떨궈요. 밤에 창가가 너무 차갑지 않은지 확인하세요.' });
+    else v.warns.push({ level: 'caution', title: '잎이 누렇거나 떨어져요', body: '빛(너무 강하거나 부족한지)과 물 상태를 함께 확인해 보세요. 기르는 법의 "이상 증상"을 참고하세요.' });
+  }
+  return v;
+}
+function afterChecks(plant) {
+  var sp = SPECIES[plant.species] || {};
+  var list = [];
+  if (plant.base === 'saucer' || plant.base == null) list.push({ key: 'saucer', label: '받침에 고인 물 버렸음' });
+  list.push({ key: 'vent', label: '환기했음' });
+  if (sp.rotate) list.push({ key: 'rotate', label: '화분 1/4 돌렸음' });
+  return list;
+}
+
+/* ===== 오늘 할 일 · 알림 ===== */
+function computeAll(data, weather, today) {
+  var env = buildEnv(data, weather);
+  var states = {};
+  plantsSorted(data).forEach(function (p) { states[p.id] = simulate(p, data, env, today); });
+  return { env: env, states: states, alerts: buildAlerts(data, env, states, today), tasks: buildTasks(data, env, states, today) };
+}
+function hasOutdoor(data) { return plantsSorted(data).some(function (p) { var s = data.spots[p.spotId]; return s && s.outdoor; }); }
+function outdoorOutlook(data, env, today) {
+  if (!hasOutdoor(data) || !env.hasWeather) return null;
+  var sum3 = 0, run = 0, maxRun = 0, minT = null, minTDay = null;
+  for (var i = 0; i < 7; i++) {
+    var w = env.weatherAt(addDays(today, i));
+    if (!w) continue;
+    if (i < 3 && w.precip != null) sum3 += w.precip;
+    if (w.precip != null && w.precip >= 1) { run++; maxRun = Math.max(maxRun, run); } else run = 0;
+    if (i < 2 && w.tmin != null && (minT == null || w.tmin < minT)) { minT = w.tmin; minTDay = addDays(today, i); }
+  }
+  return { rain3: Math.round(sum3 * 10) / 10, rainRun: maxRun, minT: minT, minTDay: minTDay };
+}
+function buildAlerts(data, env, states, today) {
+  var alerts = [];
+  var latest = env.latest(today);
+  var plants = plantsSorted(data);
+  if (!latest) {
+    alerts.push({ level: 'info', tag: '안내', text: '아침 온습도를 입력하면 물 주기 계산이 정확해져요.' });
+  } else {
+    var age = daysBetween(latest.date, today);
+    if (age >= 3) alerts.push({ level: 'caution', tag: '입력', text: '온습도 입력이 ' + age + '일째 없어요 — 마지막 값으로 계산 중이라 정확도가 낮아요.' });
+    if (age <= 1) {
+      var t = latest.tmin != null && latest.tmin !== '' ? Math.min(+latest.tmin, +latest.temp) : +latest.temp;
+      // 온습도계 자리의 식물은 측정값 그대로, 다른 실내 자리는 보통 더 따뜻하니 안심선 아래일 때만 알림
+      var thermo = data.settings && data.settings.thermoSpotId;
+      var seen = {};
+      plants.forEach(function (p) {
+        var sp = SPECIES[p.species], spot = data.spots[p.spotId];
+        if (!sp || !sp.cold || !spot || spot.outdoor || seen[p.species]) return;
+        var atThermo = !thermo || p.spotId === thermo;
+        var tail = sp.nightBlind ? ' 밤엔 블라인드를 닫아주세요.' : '';
+        var where = atThermo ? '' : ' (' + (data.spots[thermo] ? data.spots[thermo].name : '온습도계') + ' 기준)';
+        if (t < sp.cold.danger) { seen[p.species] = 1; alerts.push({ level: 'danger', tag: '위험', text: sp.name + ': ' + t + '℃' + where + ' — 위험선(' + sp.cold.danger + '℃) 아래예요. 따뜻한 곳으로 옮겨주세요.' }); }
+        else if (t < sp.cold.caution) { seen[p.species] = 1; alerts.push({ level: 'caution', tag: '주의', text: sp.name + ': ' + t + '℃' + where + ' — 안심선(' + sp.cold.caution + '℃) 아래예요.' + tail }); }
+        else if (atThermo && t < sp.cold.caution + 3) { seen[p.species] = 1; alerts.push({ level: 'caution', tag: '주의', text: sp.name + ': ' + t + '℃ — 안심선(' + sp.cold.caution + '℃)에 가까워요.' + tail }); }
+      });
+      if (latest.hum >= 75) alerts.push({ level: 'caution', tag: '고습', text: '습도 ' + latest.hum + '% — 환기하고, 습기원(욕실·주방) 근처 화분을 점검하세요.' });
+      else {
+        var recent = env.dates.filter(function (dd) { return dd <= today && daysBetween(dd, today) <= 2; });
+        if (recent.length >= 2) {
+          var avg = recent.reduce(function (s, dd) { return s + (+data.readings[dd].hum); }, 0) / recent.length;
+          if (avg >= 70) alerts.push({ level: 'caution', tag: '고습', text: '습도가 높은 날이 이어져요(평균 ' + Math.round(avg) + '%) — 무레 주의. 환기·서큘레이터를 켜주세요.' });
+        }
+      }
+      if (latest.hum <= 40) alerts.push({ level: 'info', tag: '건조', text: '습도 ' + latest.hum + '% — 토키와시노부 엽수, 히터 바람이 닿지 않는지 확인하세요.' });
+    }
+  }
+  var poorSpots = live(data.spots).filter(function (s) { return !s.outdoor && (s.vent === 'poor' || s.moistSource); });
+  poorSpots.forEach(function (s) {
+    var any = plants.some(function (p) { return p.spotId === s.id; });
+    if (any) alerts.push({ level: 'caution', tag: '자리', text: s.name + ': 환기가 나쁘거나 습기원 근처예요 — 예전에 윌마를 잃은 조건과 비슷해요. 자리를 옮기거나 환기를 자주 해주세요.' });
+  });
+  var out = outdoorOutlook(data, env, today);
+  if (hasOutdoor(data) && !env.hasWeather) alerts.push({ level: 'info', tag: '날씨', text: '실외 날씨가 아직 없어요 — 마당 화분은 월평균값으로 계산 중이에요.' });
+  if (out) {
+    if (out.minT != null && out.minT <= 0) alerts.push({ level: 'danger', tag: '영하', text: '최저 ' + out.minT + '℃ 예보(' + relDay(out.minTDay, today) + ') — 마당 윌마를 실내로 들여주세요.' });
+    else if (out.minT != null && out.minT <= 2) alerts.push({ level: 'caution', tag: '추위', text: '최저 ' + out.minT + '℃ 예보 — 0℃ 이하가 이어지면 마당 윌마를 실내로.' });
+    if (out.rainRun >= 3) alerts.push({ level: 'caution', tag: '비', text: '비가 ' + out.rainRun + '일 이어지는 예보 — 마당 윌마를 처마 밑으로 옮기면 과습을 막을 수 있어요.' });
+    else if (out.rain3 >= 5) alerts.push({ level: 'info', tag: '비', text: '앞으로 3일 비 ' + out.rain3 + 'mm 예보 — 마당 화분은 비가 물 주기를 대신해요.' });
+  }
+  if (seasonOf(today) === 'summer') {
+    var sunny = plants.filter(function (p) { var s = data.spots[p.spotId]; return s && !s.outdoor && s.sun === 'high' && (p.species === 'coffee' || p.species === 'pilea'); });
+    if (sunny.length) alerts.push({ level: 'info', tag: '햇빛', text: '한여름 직사광선 — ' + sunny.map(function (p) { return p.name; }).join('·') + '은 블라인드로 가려주세요.' });
+  }
+  if (!alerts.length) alerts.push({ level: 'ok', tag: '정상', text: '경고 없음 — 오늘은 평온해요.' });
+  return alerts;
+}
+function taskDone(data, today, key) {
+  var o = data.tasks[today + '|' + key];
+  return !!(o && !o.deleted && o.done);
+}
+function buildTasks(data, env, states, today) {
+  var tasks = [];
+  var latest = env.latest(today);
+  var hasToday = !!(data.readings[today] && !data.readings[today].deleted);
+  tasks.push({ key: 'reading', kind: 'reading', title: '아침 온습도 입력', sub: '하루 1번 · 온습도계 위치 기준', done: hasToday });
+  var plants = plantsSorted(data);
+  plants.forEach(function (p) {
+    var st = states[p.id];
+    if (st.due || st.checkedToday) {
+      tasks.push({ key: 'check:' + p.id, kind: 'check', plantId: p.id, title: p.name + ' · 흙 확인', sub: '남은 수분 ' + Math.round(st.M) + '% · ' + st.rule, done: st.checkedToday && !st.due });
+    }
+  });
+  plants.forEach(function (p) {
+    var sp = SPECIES[p.species], spot = data.spots[p.spotId], st = states[p.id];
+    if (!sp || !spot || spot.outdoor) return;
+    if (sp.mist && !(latest && latest.hum >= 70 && daysBetween(latest.date, today) <= 1)) {
+      tasks.push({ key: 'mist:' + p.id, kind: 'toggle', title: p.name + ' · 엽수', sub: '하루 1번 잎 앞뒤에 분무', done: taskDone(data, today, 'mist:' + p.id) });
+    }
+    if (sp.nightBlind && st.ctx.coffeeWinter) {
+      tasks.push({ key: 'blind:' + p.id, kind: 'toggle', title: p.name + ' · 밤 블라인드 닫기', sub: '창가 냉기 대책', done: taskDone(data, today, 'blind:' + p.id) });
+    }
+  });
+  var humid = buildAlertsHumid(data, env, today);
+  if (humid) tasks.push({ key: 'vent', kind: 'toggle', title: '환기 10분', sub: '창문을 열거나 서큘레이터 켜기', done: taskDone(data, today, 'vent') });
+  var out = outdoorOutlook(data, env, today);
+  if (out && out.minT != null && out.minT <= 0) tasks.push({ key: 'frost', kind: 'toggle', title: '마당 윌마 실내로 들이기', sub: '최저 ' + out.minT + '℃ 예보', done: taskDone(data, today, 'frost') });
+  if (out && out.rainRun >= 3) tasks.push({ key: 'shelter', kind: 'toggle', title: '마당 윌마 처마 밑으로', sub: '비 ' + out.rainRun + '일 연속 예보', done: taskDone(data, today, 'shelter') });
+  return tasks;
+}
+function buildAlertsHumid(data, env, today) {
+  var latest = env.latest(today);
+  if (!latest || daysBetween(latest.date, today) > 1) return false;
+  if (latest.hum >= 75) return true;
+  var recent = env.dates.filter(function (dd) { return dd <= today && daysBetween(dd, today) <= 2; });
+  if (recent.length >= 2) {
+    var avg = recent.reduce(function (s, dd) { return s + (+data.readings[dd].hum); }, 0) / recent.length;
+    if (avg >= 70) return true;
+  }
+  return false;
+}
+
+/* ===== 통계 ===== */
+function waterStats(data, plantId, today) {
+  var dates = [];
+  plantLogs(data, plantId).forEach(function (l) {
+    if (l.type === 'water' || (l.type === 'check' && l.action === 'water')) if (dates[dates.length - 1] !== l.date) dates.push(l.date);
+  });
+  var iv = [], ivSeason = [], se = seasonOf(today);
+  for (var i = 1; i < dates.length; i++) {
+    var n = daysBetween(dates[i - 1], dates[i]);
+    iv.push(n);
+    if (seasonOf(dates[i]) === se) ivSeason.push(n);
+  }
+  function avg(a) { return a.length ? Math.round(a.reduce(function (s, x) { return s + x; }, 0) / a.length * 10) / 10 : null; }
+  return { count: dates.length, avg: avg(iv), seasonAvg: avg(ivSeason), season: se, recent: iv.slice(-6) };
+}
+
+/* ===== 동기화 병합 ===== */
+function mergeMap(a, b) {
+  var out = {}, k;
+  a = a || {}; b = b || {};
+  for (k in a) out[k] = a[k];
+  for (k in b) {
+    if (!out[k] || (b[k] && (b[k].updatedAt || 0) > (out[k].updatedAt || 0))) out[k] = b[k];
+  }
+  return out;
+}
+function mergeData(a, b) {
+  if (!a) return b;
+  if (!b) return a;
+  var out = { schema: 1 };
+  out.settings = ((a.settings && a.settings.updatedAt) || 0) >= ((b.settings && b.settings.updatedAt) || 0) ? a.settings : b.settings;
+  ['spots', 'plants', 'logs', 'readings', 'tasks', 'info'].forEach(function (c) { out[c] = mergeMap(a[c], b[c]); });
+  return out;
+}
+function normalizeData(d) {
+  d = d || {};
+  if (!d.schema) d.schema = 1;
+  ['spots', 'plants', 'logs', 'readings', 'tasks', 'info'].forEach(function (c) { if (!d[c] || typeof d[c] !== 'object') d[c] = {}; });
+  if (!d.settings) d.settings = { lat: 35.414, lon: 139.505, placeName: '요코하마 이즈미구', thermoSpotId: null, updatedAt: 0 };
+  return d;
+}
+function stableString(d) {
+  var keys = ['schema', 'settings', 'spots', 'plants', 'logs', 'readings', 'tasks', 'info'];
+  function sortObj(o) {
+    if (Array.isArray(o)) return o.map(sortObj);
+    if (o && typeof o === 'object') { var r = {}; Object.keys(o).sort().forEach(function (k) { r[k] = sortObj(o[k]); }); return r; }
+    return o;
+  }
+  var obj = {};
+  keys.forEach(function (k) { obj[k] = sortObj(d[k]); });
+  return JSON.stringify(obj);
+}
+
+/* ===== 저장소 (이 기기) ===== */
+var LS = { data: 'plantcare.data.v1', gh: 'plantcare.gh.v1', wx: 'plantcare.weather.v1', ui: 'plantcare.ui.v1' };
+var Store = {
+  get: function (k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del: function (k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+
+/* ===== 실외 날씨 (Open-Meteo, 키 불필요) ===== */
+function fetchWeather(lat, lon, prev) {
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + encodeURIComponent(lat) + '&longitude=' + encodeURIComponent(lon) +
+    '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,et0_fao_evapotranspiration&past_days=31&forecast_days=7&timezone=Asia%2FTokyo';
+  return fetch(url, { cache: 'no-store' }).then(function (r) {
+    if (!r.ok) throw new Error('날씨 응답 ' + r.status);
+    return r.json();
+  }).then(function (j) {
+    var days = {};
+    var keep = prev && prev.lat === lat && prev.lon === lon && prev.days ? prev.days : {};
+    var cutoff = addDays(todayStr(), -180);
+    Object.keys(keep).forEach(function (d) { if (d >= cutoff) days[d] = keep[d]; });
+    var D = j.daily || {};
+    (D.time || []).forEach(function (d, i) {
+      days[d] = {
+        tmax: D.temperature_2m_max ? D.temperature_2m_max[i] : null,
+        tmin: D.temperature_2m_min ? D.temperature_2m_min[i] : null,
+        precip: D.precipitation_sum ? D.precipitation_sum[i] : null,
+        et0: D.et0_fao_evapotranspiration ? D.et0_fao_evapotranspiration[i] : null
+      };
+    });
+    return { fetchedAt: Date.now(), lat: lat, lon: lon, days: days };
+  });
+}
+
+/* ===== GitHub 비공개 저장소 동기화 ===== */
+function b64EncodeUtf8(str) {
+  var bytes = new TextEncoder().encode(str), bin = '';
+  for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64DecodeUtf8(b64) {
+  var bin = atob(String(b64).replace(/\s/g, '')), bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+var GH = {
+  // 따로 토큰을 넣지 않았으면, 같은 주소(github.io)에 있는 리마인더의 GitHub 연결을 함께 쓴다
+  cfg: function () {
+    var c = Store.get(LS.gh) || {};
+    var out = { owner: c.owner || '', repo: c.repo || '', branch: c.branch || '', path: c.path || 'plantcare/data.json', token: c.token || '', verified: !!c.verified, shared: false };
+    if (!out.token) {
+      try {
+        var rs = JSON.parse(localStorage.getItem('newtab-reminder-sync') || 'null');
+        var rt = localStorage.getItem('newtab-reminder-token') || '';
+        if (rs && rs.owner && rs.repo && rt) { out.owner = rs.owner; out.repo = rs.repo; out.token = rt; out.shared = true; out.verified = true; }
+      } catch (e) {}
+    }
+    return out;
+  },
+  configured: function (c) { return !!(c.owner && c.repo && c.path && c.token && c.verified); },
+  repoInfo: function (c) {
+    return fetch('https://api.github.com/repos/' + encodeURIComponent(c.owner) + '/' + encodeURIComponent(c.repo), { headers: GH.headers(c), cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw GH.err(r.status); return r.json(); });
+  },
+  url: function (c) {
+    return 'https://api.github.com/repos/' + encodeURIComponent(c.owner) + '/' + encodeURIComponent(c.repo) + '/contents/' +
+      c.path.split('/').map(encodeURIComponent).join('/');
+  },
+  headers: function (c) {
+    return { 'Authorization': 'Bearer ' + c.token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  },
+  err: function (status, fallback) {
+    var e = new Error(
+      status === 401 ? '토큰이 올바르지 않거나 만료됐어요' :
+      status === 403 ? '권한이 없거나 요청 한도를 넘었어요 (토큰 권한 확인)' :
+      status === 404 ? '저장소를 찾을 수 없어요 (이름·브랜치·권한 확인)' :
+      status === 409 || status === 422 ? '다른 기기와 동시에 저장됐어요' : (fallback || ('GitHub 오류 ' + status)));
+    e.status = status;
+    return e;
+  },
+  get: function (c) {
+    return fetch(GH.url(c) + (c.branch ? '?ref=' + encodeURIComponent(c.branch) : ''), { headers: GH.headers(c), cache: 'no-store' }).then(function (r) {
+      if (r.status === 404) {
+        // 파일이 아직 없을 수도, 저장소가 없을 수도 있음 → 저장소 확인
+        return fetch('https://api.github.com/repos/' + encodeURIComponent(c.owner) + '/' + encodeURIComponent(c.repo), { headers: GH.headers(c), cache: 'no-store' })
+          .then(function (r2) { if (!r2.ok) throw GH.err(r2.status); return { exists: false }; });
+      }
+      if (!r.ok) throw GH.err(r.status);
+      return r.json().then(function (j) {
+        var data = JSON.parse(b64DecodeUtf8(j.content || ''));
+        return { exists: true, sha: j.sha, data: data };
+      });
+    });
+  },
+  put: function (c, data, sha) {
+    var body = { message: '식물 기록 동기화 ' + new Date().toISOString(), content: b64EncodeUtf8(JSON.stringify(data)) };
+    if (c.branch) body.branch = c.branch;
+    if (sha) body.sha = sha;
+    return fetch(GH.url(c), { method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, GH.headers(c)), body: JSON.stringify(body) })
+      .then(function (r) {
+        if (!r.ok) throw GH.err(r.status);
+        return r.json();
+      });
+  }
+};
+
+/* ===== 상태 ===== */
+var DATA = null, WEATHER = null;
+var WX = { loading: false, error: null };
+var SYNC = { state: 'off', msg: '', last: null, running: false, pending: false, timer: null };
+var UI = null;
+var CHECK = null;
+var READ_DATE = null;
+var NEED_RENDER = false;
+var lastBase = '#/';
+var overlayPushed = false;
+
+var SUN_LABEL = { high: '해가 잘 듦', mid: '해가 보통', low: '해가 적음' };
+var VENT_LABEL = { good: '환기 좋음', normal: '환기 보통', poor: '환기 나쁨' };
+var MAT_LABEL = { plastic: '플라스틱', clay: '토분(테라코타)', ceramic: '유약 도자기', other: '기타' };
+var BASE_LABEL = { none: '없음', saucer: '물받이 접시', stand: '띄움 받침대' };
+var RESULT_LABEL = { moist: '아직 촉촉', top: '겉만 마름', dry: '바싹 마름' };
+var RESULT_LABEL_S = { moist: '사스티 파랑', top: '사스티 흰색', dry: '흰색+가벼움' };
+var CHECK_LABEL = { saucer: '받침 물 버림', vent: '환기', rotate: '1/4 돌림' };
+
+/* ===== 유틸 ===== */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+}
+function hhmm(ms) { var d = ms ? new Date(ms) : new Date(); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); }
+function pastDay(d, today) {
+  var n = daysBetween(d, today);
+  return n === 0 ? '오늘' : n === 1 ? '어제' : shortDate(d);
+}
+function fmtNum(v, unit) { return v == null || v === '' || !isFinite(v) ? '—' : (Math.round(v * 10) / 10) + (unit || ''); }
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function () { el.textContent = ''; }, 3200);
+}
+function saveUI() { Store.set(LS.ui, UI); }
+function isEditing() {
+  var a = document.activeElement;
+  return !!(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'checkbox' && a.type !== 'file');
+}
+function requestRender() {
+  var r = parseRoute();
+  if (isEditing() || r.overlay === 'edit' || r.overlay === 'spot' || r.overlay === 'info') { NEED_RENDER = true; return; }
+  render();
+}
+var DIRTY = {};
+var POINTER_DOWN = false;
+function commit(fn, msg) {
+  fn(DATA);
+  Store.set(LS.data, DATA);
+  render();
+  if (msg) toast(msg);
+  scheduleSync();
+}
+function newLog(o) {
+  o.id = uid('l');
+  o.date = o.date || todayStr();
+  o.time = hhmm();
+  o.updatedAt = Date.now();
+  return o;
+}
+function safeUrl(u) {
+  u = String(u || '').trim();
+  if (!u || /^(javascript|data|vbscript):/i.test(u)) return '../';
+  return u;
+}
+function spotDesc(s) {
+  if (!s) return '';
+  var a = [s.outdoor ? '실외' : '실내', SUN_LABEL[s.sun] || ''];
+  if (s.outdoor && s.rain) a.push('비 맞음');
+  if (s.vent === 'poor') a.push('환기 나쁨');
+  if (s.moistSource) a.push('습기원 근처');
+  if (s.summerShade) a.push('여름 차광');
+  return a.filter(Boolean).join(' · ');
+}
+
+/* ===== 라우팅 ===== */
+function parseRoute(h) {
+  var p = String(h == null ? location.hash : h).replace(/^#\/?/, '').split('/');
+  var r = { page: 'home', overlay: null, id: null, key: null };
+  if (p[0] === 'plant' && p[1]) { r.page = 'plant'; r.id = decodeURIComponent(p[1]); }
+  else if (p[0] === 'settings') r.page = 'settings';
+  else if (p[0] === 'check' && p[1]) { r.overlay = 'check'; r.id = decodeURIComponent(p[1]); }
+  else if (p[0] === 'edit' && p[1]) { r.overlay = 'edit'; r.id = decodeURIComponent(p[1]); }
+  else if (p[0] === 'spot' && p[1]) { r.overlay = 'spot'; r.id = decodeURIComponent(p[1]); }
+  else if (p[0] === 'info' && p[1] && p[2]) { r.overlay = 'info'; r.id = decodeURIComponent(p[1]); r.key = decodeURIComponent(p[2]); }
+  return r;
+}
+function closeOverlay() {
+  DIRTY = {};
+  if (overlayPushed) { overlayPushed = false; history.back(); }
+  else replaceHash(lastBase);
+}
+function replaceHash(h) {
+  location.replace(location.pathname + location.search + h);
+}
+
+/* ===== 렌더 ===== */
+function render() {
+  NEED_RENDER = false;
+  var today = todayStr();
+  var all = computeAll(DATA, WEATHER, today);
+  var r = parseRoute();
+  var base = r.overlay ? parseRoute(lastBase) : r;
+  var html;
+  if (base.page === 'plant') {
+    var p = DATA.plants[base.id];
+    html = p && !p.deleted ? pagePlant(p, all, today) : pageMissing();
+  } else if (base.page === 'settings') html = pageSettings(all, today);
+  else html = pageHome(all, today);
+  // 입력 중이던 값·포커스는 다시 그린 뒤에도 유지
+  var keep = {}, id, el;
+  for (id in DIRTY) { el = document.getElementById(id); if (el) keep[id] = el.type === 'checkbox' ? el.checked : el.value; }
+  var focusId = document.activeElement && document.activeElement.id;
+  document.getElementById('app').innerHTML = html;
+  document.getElementById('overlay').innerHTML = r.overlay ? overlayHtml(r, all, today) : '';
+  document.body.style.overflow = r.overlay ? 'hidden' : '';
+  for (id in keep) { el = document.getElementById(id); if (el) { if (el.type === 'checkbox') el.checked = keep[id]; else el.value = keep[id]; } }
+  if (focusId) { el = document.getElementById(focusId); if (el && el !== document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) el.focus(); }
+}
+function syncChipText() {
+  if (SYNC.state === 'syncing') return '동기화 중…';
+  if (SYNC.state === 'ok') return '동기화됨 ' + hhmm(SYNC.last && SYNC.last.getTime());
+  if (SYNC.state === 'error') return '동기화 오류';
+  return '동기화 꺼짐';
+}
+function updateSyncChip() {
+  var els = document.querySelectorAll('[data-sync-chip]');
+  for (var i = 0; i < els.length; i++) {
+    els[i].textContent = syncChipText();
+    els[i].className = 'chip' + (SYNC.state === 'error' ? ' warn' : '');
+  }
+  var st = document.getElementById('sync-status');
+  if (st) st.textContent = syncStatusLong();
+}
+function syncStatusLong() {
+  if (SYNC.state === 'syncing') return '동기화 중…';
+  if (SYNC.state === 'ok') return '마지막 동기화: ' + hhmm(SYNC.last && SYNC.last.getTime());
+  if (SYNC.state === 'error') return '오류: ' + SYNC.msg;
+  var c = GH.cfg();
+  if (c.token && !c.verified) return '저장소 확인 전 — "저장하고 동기화"를 눌러주세요';
+  return GH.configured(c) ? '대기 중' : '설정 전 — 이 기기에만 저장돼요';
+}
+
+/* ----- 홈 ----- */
+function pageHome(all, today) {
+  var plants = plantsSorted(DATA);
+  var h = '<div class="wrap">';
+  h += '<header class="top"><div><h1>우리 방 식물</h1><p class="s13 muted" style="margin:4px 0 0">' + longDate(today) + ' · ' + plants.length + '그루 관리 중</p></div>' +
+    '<div class="chips"><span class="chip green">계절: ' + SEASON_LABEL[seasonOf(today)] + ' · ' + nextSeasonNote(today) + '</span>' +
+    '<a href="#/settings" class="chip" data-sync-chip style="text-decoration:none">' + syncChipText() + '</a>' +
+    '<a href="' + esc(safeUrl(DATA.settings.reminderUrl)) + '" class="btn small">리마인더</a>' +
+    '<a href="#/settings" class="btn small">설정</a></div></header>';
+  if (!UI.bannerOff) {
+    h += '<div class="banner"><div><b>처음 며칠은 기본값으로 계산해요.</b> 흙 확인 결과가 쌓이면 화분마다 마르는 속도가 맞춰져요. 화분 크기·재질·받침은 각 식물 → <b>화분 정보 수정</b>에서 입력하면 더 정확해져요.</div>' +
+      '<button class="x" data-act="banner-off" aria-label="안내 닫기">✕</button></div>';
+  }
+  h += '<div class="row">' + readingCard(all, today) + weatherCard(today) + alertsCard(all.alerts) + '</div>';
+  h += tasksCard(all.tasks);
+  h += '<section aria-labelledby="all-t" style="display:flex;flex-direction:column;gap:20px"><div class="card-head"><h2 id="all-t" style="margin:0;font-size:19px">전체 식물</h2><a href="#/edit/new" class="btn small">식물 추가</a></div>';
+  live(DATA.spots).sort(byOrder).forEach(function (s) {
+    var ps = plants.filter(function (p) { return p.spotId === s.id; });
+    if (!ps.length) return;
+    h += '<div style="display:flex;flex-direction:column;gap:12px"><div class="spot-head"><h3>' + esc(s.name) + '</h3><span class="s13 muted">' + esc(spotDesc(s)) + '</span></div><div class="grid">';
+    ps.forEach(function (p) { h += plantCard(p, all.states[p.id], today); });
+    h += '</div></div>';
+  });
+  var orphan = plants.filter(function (p) { var s = DATA.spots[p.spotId]; return !s || s.deleted; });
+  if (orphan.length) {
+    h += '<div style="display:flex;flex-direction:column;gap:12px"><div class="spot-head"><h3>자리 미지정</h3></div><div class="grid">';
+    orphan.forEach(function (p) { h += plantCard(p, all.states[p.id], today); });
+    h += '</div></div>';
+  }
+  h += '</section>';
+  h += footer();
+  return h + '</div>';
+}
+function footer() {
+  return '<footer class="foot">날씨 데이터: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0) · 계산은 참고용이에요. 최종 판단은 흙 상태로 해주세요.</footer>';
+}
+function readingCard(all, today) {
+  var date = READ_DATE && READ_DATE <= today ? READ_DATE : today;
+  var r = DATA.readings[date] && !DATA.readings[date].deleted ? DATA.readings[date] : null;
+  var latest = all.env.latest(today);
+  var thermo = DATA.spots[DATA.settings.thermoSpotId];
+  var status;
+  if (r) status = (date === today ? '오늘 입력함 ' + hhmm(r.updatedAt) : shortDate(date) + ' 기록 있음') + ' · 고치면 덮어써요';
+  else if (latest) status = '마지막 입력: ' + pastDay(latest.date, today) + ' ' + fmtNum(latest.temp, '℃') + ' · ' + fmtNum(latest.hum, '%');
+  else status = '아직 입력이 없어요';
+  return '<form class="card f1" data-form="reading" aria-labelledby="rd-t">' +
+    '<div class="card-head"><h2 id="rd-t">아침 온습도</h2><span class="small muted">하루 1번 · ' + esc(thermo && !thermo.deleted ? thermo.name : '온습도계') + ' 기준</span></div>' +
+    '<div class="fields">' +
+    '<div class="field"><label for="r-temp">온도 (℃)</label><input class="big" id="r-temp" name="temp" type="number" step="0.1" inputmode="decimal" required value="' + (r ? esc(r.temp) : '') + '"></div>' +
+    '<div class="field"><label for="r-hum">습도 (%)</label><input class="big" id="r-hum" name="hum" type="number" step="1" min="1" max="100" inputmode="numeric" required value="' + (r ? esc(r.hum) : '') + '"></div>' +
+    '<div class="field"><label for="r-tmin">밤 최저 (선택)</label><input class="big" id="r-tmin" name="tmin" type="number" step="0.1" inputmode="decimal" placeholder="선택" value="' + (r && r.tmin != null ? esc(r.tmin) : '') + '"></div>' +
+    '</div>' +
+    '<div class="card-head" style="align-items:center"><div class="field" style="flex:0 1 170px"><label for="read-date">날짜</label><input id="read-date" type="date" max="' + today + '" value="' + date + '"></div>' +
+    '<span class="small muted" style="flex:1 1 140px">' + esc(status) + '</span>' +
+    '<button type="submit" class="btn primary">저장</button></div></form>';
+}
+function weatherCard(today) {
+  var h = '<section class="card f1" aria-labelledby="wx-t"><div class="card-head"><h2 id="wx-t">실외 날씨</h2><span class="small muted">자동 · ' + esc(DATA.settings.placeName || '') + '</span></div>';
+  var days = WEATHER && WEATHER.days;
+  var w0 = days && days[today];
+  if (!w0) {
+    h += '<p class="s13 muted" style="margin:0">' + (WX.loading ? '불러오는 중…' : WX.error ? '날씨를 불러오지 못했어요. 마당 화분은 월평균값으로 계산 중이에요.' : '아직 날씨 정보가 없어요.') + '</p>';
+    if (!WX.loading) h += '<div><button type="button" class="btn small" data-act="retry-weather">다시 불러오기</button></div>';
+    return h + '</section>';
+  }
+  h += '<div class="stats3"><div class="stat"><span class="small muted">오늘 최저</span><b>' + fmtNum(w0.tmin, '℃') + '</b></div>' +
+    '<div class="stat"><span class="small muted">오늘 최고</span><b>' + fmtNum(w0.tmax, '℃') + '</b></div>' +
+    '<div class="stat"><span class="small muted">강수</span><b>' + fmtNum(w0.precip, 'mm') + '</b></div></div>';
+  var lines = [];
+  for (var i = 1; i <= 3; i++) {
+    var d = addDays(today, i), w = days[d];
+    if (w) lines.push('<li>' + relDay(d, today) + ' ' + fmtNum(w.tmin) + '~' + fmtNum(w.tmax, '℃') + (w.precip >= 1 ? ' · 비 ' + fmtNum(w.precip, 'mm') : ' · 비 없음') + '</li>');
+  }
+  if (lines.length) h += '<ul class="s13" style="margin:0;padding-left:18px;line-height:1.7;color:var(--ink2)">' + lines.join('') + '</ul>';
+  h += '<span class="small muted">업데이트 ' + hhmm(WEATHER.fetchedAt) + (WX.loading ? ' · 새로 불러오는 중…' : '') + '</span>';
+  return h + '</section>';
+}
+function alertsCard(alerts) {
+  var h = '<section class="card f1" aria-labelledby="al-t"><h2 id="al-t">알림</h2><ul class="alerts">';
+  alerts.forEach(function (a) { h += '<li><span class="tag ' + a.level + '">' + esc(a.tag) + '</span><span>' + esc(a.text) + '</span></li>'; });
+  return h + '</ul></section>';
+}
+function tasksCard(tasks) {
+  var done = tasks.filter(function (t) { return t.done; }).length;
+  var h = '<section class="card" aria-labelledby="td-t" style="gap:6px"><div class="card-head" style="padding-bottom:6px"><h2 id="td-t">오늘 할 일</h2><span class="small muted">' + tasks.length + '개 중 ' + done + '개 완료</span></div>';
+  tasks.forEach(function (t) {
+    h += '<div class="task' + (t.done ? ' done' : '') + '"><div class="t"><b>' + esc(t.title) + '</b><span class="s13 muted">' + esc(t.sub) + '</span></div>';
+    if (t.kind === 'reading') h += t.done ? '<span class="donemark">완료</span>' : '<button type="button" class="btn primary" data-act="focus-reading">입력하기</button>';
+    else if (t.kind === 'check') h += t.done ? '<span class="donemark">확인함</span>' : '<a class="btn primary" href="#/check/' + encodeURIComponent(t.plantId) + '">흙 확인</a>';
+    else {
+      var id = 'tk-' + t.key.replace(/[^a-z0-9_-]/gi, '_');
+      h += '<label class="check" for="' + id + '"><input id="' + id + '" type="checkbox" data-task="' + esc(t.key) + '"' + (t.done ? ' checked' : '') + '>완료</label>';
+    }
+    h += '</div>';
+  });
+  return h + '</section>';
+}
+function plantCard(p, st, today) {
+  var sp = SPECIES[p.species] || SPECIES.wilma;
+  var s = statusOf(st, today);
+  var pct = Math.round(st.M);
+  return '<a class="pcard" href="#/plant/' + encodeURIComponent(p.id) + '">' +
+    '<div class="nm"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>' + esc(p.name) + '</b><span class="small muted">' + esc(sp.full) + '</span></div>' +
+    '<span class="badge" style="background:' + s.bg + ';color:' + s.fg + '">' + s.label + '</span></div>' +
+    '<span class="rule">' + esc(st.rule) + '</span>' +
+    '<div style="display:flex;flex-direction:column;gap:6px"><div class="kv" style="color:var(--ink2)"><span>남은 수분 (추정)' + (p.sustee ? ' <span class="mini">사스티</span>' : '') + '</span><b>' + pct + '%</b></div>' +
+    '<div class="gauge" role="img" aria-label="남은 수분 ' + pct + '%"><i style="width:' + pct + '%;background:' + s.bar + '"></i></div></div>' +
+    '<div class="kv"><span>다음 확인 ' + relDay(st.next, today) + '</span><span>마지막 물 ' + (st.lastWater ? pastDay(st.lastWater, today) : (st.lastRain ? '비 ' + pastDay(st.lastRain, today) : '기록 없음')) + '</span></div></a>';
+}
+
+/* ----- 식물 상세 ----- */
+function pageMissing() {
+  return '<div class="wrap"><a href="#/" class="btn small" style="align-self:flex-start">← 홈으로</a><div class="card"><h2>식물을 찾을 수 없어요</h2><p class="s13 muted" style="margin:0">삭제됐거나 주소가 바뀌었어요.</p></div></div>';
+}
+function pagePlant(p, all, today) {
+  var sp = SPECIES[p.species] || SPECIES.wilma;
+  var st = all.states[p.id];
+  var spot = DATA.spots[p.spotId];
+  var s = statusOf(st, today);
+  var h = '<div class="wrap"><a href="#/" style="align-self:flex-start;font-size:14px;font-weight:500;text-decoration:none;padding:10px 0;min-height:44px;display:inline-flex;align-items:center">← 홈으로</a>';
+  h += '<header class="top" style="align-items:flex-end"><div style="display:flex;flex-direction:column;gap:8px"><h1 style="font-size:30px">' + esc(p.name) + '</h1><div class="chips">' +
+    '<span class="chip">' + esc(sp.full) + ' · <i>' + esc(sp.latin) + '</i></span>' +
+    '<span class="chip">' + esc(spot && !spot.deleted ? spot.name + ' · ' + (SUN_LABEL[spot.sun] || '') : '자리 미지정') + '</span>' +
+    '<span class="chip soft">' + esc(st.rule) + '</span></div></div>' +
+    '<a href="#/edit/' + encodeURIComponent(p.id) + '" class="btn">화분 정보 수정</a></header>';
+  if (sp.toxic) h += '<div class="note danger"><b>독성이 있어요</b>아이·반려동물 손이 닿지 않는 곳에 두세요. 자세한 내용과 연락처는 아래 "안전" 탭에 있어요.</div>';
+  h += '<div class="row">' + statusCardHtml(p, sp, st, s, spot, all, today) + envCardHtml(p, sp, spot, all, today) + '</div>';
+  h += '<div class="row">' + potCardHtml(p, spot) + historyCardHtml(p, today) + '</div>';
+  h += guideCardHtml(p, sp, today, st);
+  h += footer();
+  return h + '</div>';
+}
+function statusCardHtml(p, sp, st, s, spot, all, today) {
+  var pct = Math.round(st.M);
+  var reasons = [];
+  if (spot && spot.outdoor) {
+    var et = [], days = WEATHER && WEATHER.days;
+    for (var i = 1; i <= 3; i++) { var w = days && days[addDays(today, -i)]; if (w && w.et0 != null) et.push(w.et0); }
+    reasons.push(et.length ? '최근 ' + et.length + '일 평균 증발량 ' + fmtNum(et.reduce(function (a, b) { return a + b; }, 0) / et.length, 'mm/일') + ' (실외 날씨 자동)' : '실외 날씨가 없어 월평균값으로 계산 중');
+    if (spot.rain) reasons.push('비 5mm 이상 온 날은 물 준 것으로 계산' + (st.lastRain ? ' · 마지막: ' + pastDay(st.lastRain, today) : ''));
+  } else {
+    var rec = all.env.dates.filter(function (d) { return d <= today && daysBetween(d, today) <= 2; });
+    if (rec.length) {
+      var tt = 0, hh = 0;
+      rec.forEach(function (d) { tt += +DATA.readings[d].temp; hh += +DATA.readings[d].hum; });
+      reasons.push((rec.length === 1 ? pastDay(rec[0], today) + ' 아침 ' : '최근 ' + rec.length + '일 아침 평균 ') + fmtNum(tt / rec.length, '℃') + ' / 습도 ' + Math.round(hh / rec.length) + '%');
+    } else {
+      var lt = all.env.latest(today);
+      reasons.push(lt ? '최근 3일 입력 없음 → 마지막 값(' + pastDay(lt.date, today) + ' ' + fmtNum(lt.temp, '℃') + ')으로 계산' : '온습도 입력 없음 → 기본값(20℃·55%)으로 계산');
+    }
+  }
+  var se = SEASON_LABEL[st.ctx.season];
+  var extra = '';
+  if (p.species === 'coffee' && st.ctx.coffeeWinter && st.ctx.season !== 'winter') extra = ' · 15℃ 미만이라 겨울 기준 적용';
+  if (p.species === 'shinobu' && st.ctx.cool && st.ctx.season !== 'winter') extra = ' · 10℃ 미만이라 겨울 기준 적용';
+  reasons.push('계절: ' + se + extra);
+  var miss = [];
+  if (p.potSize == null || p.potSize === '') miss.push('크기');
+  if (!p.potMaterial) miss.push('재질');
+  if (!p.base) miss.push('받침');
+  if (miss.length) reasons.push('화분 정보 미입력(' + miss.join('·') + ') → 기본값으로 계산');
+  if (st.checks > 0 && Math.abs(st.k - 1) > 0.05) reasons.push('흙 확인 ' + st.checks + '번 반영: 기본보다 ' + Math.round(Math.abs(st.k - 1) * 100) + '% ' + (st.k > 1 ? '빨리' : '천천히') + ' 마르는 화분');
+  else if (st.checks === 0) reasons.push('흙 확인 결과가 쌓이면 이 화분에 맞게 보정돼요');
+  if (st.snooze && st.snooze > today) reasons.push('지난 흙 확인 결과로 ' + relDay(st.snooze, today) + '까지 확인 보류');
+  return '<section class="card f2" aria-labelledby="st-t"><h2 id="st-t">지금 상태</h2>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end"><div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">남은 수분 (추정)</span><span class="big">' + pct + '%</span></div>' +
+    '<div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">다음 흙 확인</span><span style="font-size:22px;font-weight:700;line-height:1.3">' + relDay(st.next, today) + (st.due ? '' : ' 예상') + '</span></div>' +
+    '<span class="badge" style="background:' + s.bg + ';color:' + s.fg + ';padding:4px 10px">' + s.label + '</span></div>' +
+    '<div class="gauge" style="height:10px" role="img" aria-label="남은 수분 ' + pct + '%"><i style="width:' + pct + '%;background:' + s.bar + '"></i></div>' +
+    '<div class="reason"><span class="s13" style="font-weight:700;color:var(--ink2)">이렇게 계산했어요</span><ul>' + reasons.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#/check/' + encodeURIComponent(p.id) + '" class="btn primary">흙 확인하기</a>' +
+    '<button type="button" class="btn" data-act="water" data-id="' + esc(p.id) + '">물 줬음 기록</button></div></section>';
+}
+function envCardHtml(p, sp, spot, all, today) {
+  if (spot && spot.outdoor) {
+    var out = outdoorOutlook(DATA, all.env, today);
+    var h = '<section class="card f1" aria-labelledby="env-t"><h2 id="env-t">실외 환경</h2>';
+    if (!out) return h + '<p class="s13 muted" style="margin:0">날씨 정보가 아직 없어요.</p></section>';
+    h += '<dl class="info"><dt>최저 예보</dt><dd>' + fmtNum(out.minT, '℃') + (out.minTDay ? ' (' + relDay(out.minTDay, today) + ')' : '') + '</dd>' +
+      '<dt>3일 강수</dt><dd>' + fmtNum(out.rain3, 'mm') + '</dd><dt>비 연속</dt><dd>' + (out.rainRun ? out.rainRun + '일 예보' : '없음') + '</dd></dl>';
+    h += '<p class="s13" style="margin:0;line-height:1.6;color:var(--ink2)">최저기온 0℃ 이하가 이어지거나 흙이 얼 정도면 실내로 들여요. 비가 며칠 이어지면 처마 밑으로 옮기면 과습을 막을 수 있어요.</p>';
+    return h + '</section>';
+  }
+  var lt = all.env.latest(today);
+  var fresh = lt && daysBetween(lt.date, today) <= 1;
+  var t = fresh ? (lt.tmin != null && lt.tmin !== '' ? Math.min(+lt.tmin, +lt.temp) : +lt.temp) : null;
+  if (sp.cold) {
+    var c = sp.cold, lvl = t == null ? null : t < c.danger ? 'danger' : t < c.caution ? 'caution' : t < c.caution + 3 ? 'caution' : 'ok';
+    var tag = lvl === 'danger' ? '<span class="tag danger">위험</span>' : lvl === 'caution' ? '<span class="tag caution">주의</span>' : lvl === 'ok' ? '<span class="tag ok">안심</span>' : '';
+    var h2 = '<section class="card f1" aria-labelledby="env-t"><div class="card-head" style="align-items:center"><h2 id="env-t">저온 경고</h2>' + tag + '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:8px"><div class="scale"><div style="background:#9A3412"></div><div style="background:#E0A030"></div><div style="background:#4F8A62"></div></div>' +
+      '<div class="scale-l"><span>' + c.danger + '℃ 아래 위험</span><span style="text-align:center">' + c.danger + '~' + c.caution + '℃ 주의</span><span style="text-align:right">' + c.caution + '℃ 이상 안심</span></div></div>';
+    var thermo = DATA.spots[DATA.settings.thermoSpotId];
+    h2 += '<p style="margin:0;font-size:14px;line-height:1.6">' + (t == null ? '오늘 온습도를 입력하면 여기서 확인할 수 있어요.' : (fresh && lt.date === today ? '오늘 아침 ' : pastDay(lt.date, today) + ' ') + esc(thermo ? thermo.name : '온습도계') + ' <b>' + fmtNum(t, '℃') + '</b>' + (lt.tmin != null && lt.tmin !== '' ? ' (밤 최저 반영)' : '')) + '</p>';
+    if (sp.nightBlind) h2 += '<p class="s13" style="margin:0;line-height:1.6;color:var(--ink2)">밤엔 블라인드를 닫아 창 냉기를 막아주세요. 겨울엔 흙을 덜 젖게 두는 게 추위에 더 안전해요.</p>';
+    return h2 + '</section>';
+  }
+  var h3 = '<section class="card f1" aria-labelledby="env-t"><h2 id="env-t">공기 상태</h2>';
+  h3 += '<dl class="info"><dt>온도</dt><dd>' + (lt ? fmtNum(lt.temp, '℃') + ' (' + pastDay(lt.date, today) + ')' : '—') + '</dd><dt>습도</dt><dd>' + (lt ? fmtNum(lt.hum, '%') : '—') + '</dd><dt>자리</dt><dd>' + esc(spot ? VENT_LABEL[spot.vent] + (spot.moistSource ? ' · 습기원 근처' : '') : '—') + '</dd></dl>';
+  h3 += '<p class="s13" style="margin:0;line-height:1.6;color:var(--ink2)">습도가 높은 날이 이어지면 환기 알림을 띄워요. 윌마는 고온다습·통풍 불량(무레)에 약해요.</p>';
+  return h3 + '</section>';
+}
+function potCardHtml(p, spot) {
+  function val(v, label) { return v == null || v === '' ? '<dd class="unset">미입력 (기본값 사용)</dd>' : '<dd>' + esc(label) + '</dd>'; }
+  return '<section class="card f1" aria-labelledby="pot-t"><div class="card-head" style="align-items:center"><h2 id="pot-t">내 화분 정보</h2><a class="btn small" href="#/edit/' + encodeURIComponent(p.id) + '">수정</a></div>' +
+    '<dl class="info"><dt>자리</dt><dd>' + esc(spot && !spot.deleted ? spot.name : '미지정') + '</dd>' +
+    '<dt>크기</dt>' + val(p.potSize, '지름 ' + p.potSize + 'cm') +
+    '<dt>재질</dt>' + val(p.potMaterial, MAT_LABEL[p.potMaterial]) +
+    '<dt>받침</dt>' + val(p.base, BASE_LABEL[p.base]) +
+    '<dt>사스티</dt><dd>' + (p.sustee ? '사용 (색으로 확인)' : '안 씀 (손가락으로 확인)') + '</dd>' +
+    '<dt>등록일</dt><dd>' + esc(p.created || '') + '</dd></dl></section>';
+}
+function logText(l) {
+  if (l.type === 'water') return '물 줌';
+  if (l.type === 'check') {
+    var r = (l.sustee ? RESULT_LABEL_S : RESULT_LABEL)[l.result] || l.result;
+    var a = l.action === 'water' ? '물 줌' : (l.waitDays || 2) + '일 뒤 재확인';
+    var extra = [];
+    if (l.leaf && l.leaf !== 'normal') { var lo = LEAF_OPTIONS.filter(function (o) { return o.id === l.leaf; })[0]; if (lo) extra.push('잎: ' + lo.label); }
+    if (l.checks) Object.keys(l.checks).forEach(function (k) { if (l.checks[k] && CHECK_LABEL[k]) extra.push(CHECK_LABEL[k]); });
+    return '흙 확인 — ' + r + ' → ' + a + (extra.length ? ' · ' + extra.join(' · ') : '') + (l.note ? ' · 메모: ' + l.note : '');
+  }
+  return l.note || l.type;
+}
+function historyCardHtml(p, today) {
+  var logs = plantLogs(DATA, p.id).slice().reverse();
+  var stt = waterStats(DATA, p.id, today);
+  var h = '<section class="card f1" aria-labelledby="hist-t"><h2 id="hist-t">기록</h2>';
+  h += '<p class="s13 muted" style="margin:0">물 준 횟수 ' + stt.count + '회' + (stt.avg != null ? ' · 평균 간격 ' + stt.avg + '일' : '') + (stt.seasonAvg != null ? ' · ' + SEASON_LABEL[stt.season] + ' 평균 ' + stt.seasonAvg + '일' : '') +
+    (stt.recent.length ? ' · 최근 간격 ' + stt.recent.join('·') + '일' : '') + '</p>';
+  if (!logs.length) return h + '<p class="s13 muted" style="margin:0">아직 기록이 없어요. 흙 확인이나 물 준 것을 기록하면 여기에 쌓여요.</p></section>';
+  h += '<ol class="hist">';
+  logs.slice(0, 20).forEach(function (l) {
+    h += '<li><span class="d">' + shortDate(l.date) + '</span><span>' + esc(logText(l)) + '</span><button type="button" class="x" data-act="del-log" data-id="' + esc(l.id) + '" aria-label="' + shortDate(l.date) + ' 기록 삭제">✕</button></li>';
+  });
+  h += '</ol>';
+  if (logs.length > 20) h += '<p class="small muted" style="margin:0">전체 ' + logs.length + '개 중 최근 20개</p>';
+  return h + '</section>';
+}
+function seasonRowIsNow(label, cur) {
+  var order = ['봄', '장마', '여름', '가을', '겨울'];
+  var parts = label.split('~').map(function (x) { return x.trim().replace(/\s*\(.*\)$/, ''); });
+  if (parts.length === 2) {
+    var a = order.indexOf(parts[0]), b = order.indexOf(parts[1]), c = order.indexOf(cur);
+    return a >= 0 && b >= 0 && c >= a && c <= b;
+  }
+  return label.indexOf(cur) >= 0;
+}
+function guideBody(sp, key, text, today, curLabel) {
+  var lines = text.split('\n').map(function (x) { return x.trim(); }).filter(Boolean);
+  if (!lines.length) return '<p class="s13 muted" style="margin:0">내용이 없어요. 편집해서 채워주세요.</p>';
+  if (key === 'seasons') {
+    var h = '<div class="tablebox"><table><thead><tr><th scope="col" style="width:104px">계절</th><th scope="col">물</th><th scope="col">빛·온도</th><th scope="col">그 외</th></tr></thead><tbody>';
+    lines.forEach(function (ln) {
+      var c = ln.split('|').map(function (x) { return x.trim(); });
+      var now = seasonRowIsNow(c[0] || '', curLabel || SEASON_LABEL[seasonOf(today)]);
+      h += '<tr' + (now ? ' class="now"' : '') + '><th scope="row">' + esc(c[0] || '') + (now ? ' (지금 적용)' : '') + '</th><td>' + esc(c[1] || '') + '</td><td>' + esc(c[2] || '') + '</td><td>' + esc(c[3] || '') + '</td></tr>';
+    });
+    return h + '</tbody></table></div>';
+  }
+  if (key === 'trouble') {
+    var t = '<ul class="trouble">';
+    lines.forEach(function (ln) {
+      var i = ln.indexOf('→');
+      t += i >= 0 ? '<li><b>' + esc(ln.slice(0, i).trim()) + '</b><span>' + esc(ln.slice(i + 1).trim()) + '</span></li>' : '<li><span style="grid-column:1/-1">' + esc(ln) + '</span></li>';
+    });
+    return t + '</ul>';
+  }
+  return '<div class="paras">' + lines.map(function (ln) { return '<p>' + esc(ln) + '</p>'; }).join('') + '</div>';
+}
+function guideCardHtml(p, sp, today, st) {
+  var cur = SEASON_LABEL[seasonOf(today)];
+  if (st && ((p.species === 'coffee' && st.ctx.coffeeWinter) || (p.species === 'shinobu' && st.ctx.cool))) cur = '겨울';
+  var key = (UI.infoTab && UI.infoTab[p.species]) || 'seasons';
+  var text = infoText(DATA, p.species, key);
+  var ov = DATA.info[p.species + '.' + key];
+  var edited = ov && !ov.deleted;
+  var h = '<section class="card" aria-labelledby="guide-t"><div class="card-head"><h2 id="guide-t">기르는 법 — ' + esc(sp.full) + '</h2><span class="small muted">조사 내용 기반 · 화면에서 수정 가능</span></div>';
+  h += '<div class="tabs" role="tablist" aria-label="기르는 법 항목">';
+  INFO_TABS.forEach(function (t) {
+    h += '<button type="button" class="tab" role="tab" aria-selected="' + (t.key === key) + '" data-act="tab" data-sp="' + esc(p.species) + '" data-key="' + t.key + '">' + t.label + '</button>';
+  });
+  h += '</div>' + guideBody(sp, key, text, today, cur);
+  h += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><a class="btn small" href="#/info/' + encodeURIComponent(p.species) + '/' + key + '">이 항목 편집</a>' + (edited ? '<span class="small muted">직접 수정한 내용이에요</span>' : '') + '</div>';
+  return h + '</section>';
+}
+
+/* ----- 설정 ----- */
+function pageSettings(all, today) {
+  var c = GH.cfg();
+  var h = '<div class="wrap"><a href="#/" style="align-self:flex-start;font-size:14px;font-weight:500;text-decoration:none;padding:10px 0;min-height:44px;display:inline-flex;align-items:center">← 홈으로</a><header class="top"><h1>설정</h1></header>';
+  // 동기화
+  var own = Store.get(LS.gh) || {};
+  h += '<form class="card" data-form="gh" aria-labelledby="gh-t"><div class="card-head"><h2 id="gh-t">기기 간 동기화 (GitHub)</h2><span class="small muted" id="sync-status">' + esc(syncStatusLong()) + '</span></div>';
+  if (c.shared) {
+    h += '<div class="note good"><b>리마인더의 GitHub 연결을 함께 쓰는 중</b>저장소 ' + esc(c.owner + '/' + c.repo) + ' 안의 <code>' + esc(c.path) + '</code> 파일에 저장해요. 리마인더를 연결한 기기에서는 여기서 따로 설정할 게 없어요.</div>';
+  }
+  h += '<p class="s13" style="margin:0;line-height:1.7;color:var(--ink2)">비공개 저장소의 JSON 파일 하나에 기록을 저장해서 PC와 폰이 같은 데이터를 봐요. ' +
+    (c.shared ? '다른 저장소를 쓰고 싶을 때만 아래에 따로 입력하세요.' : '리마인더를 이 기기에서 연결해 두면 그 연결을 자동으로 함께 써요. 따로 쓰려면 아래에 입력하세요.') +
+    ' 토큰은 <b>이 기기 브라우저에만</b> 저장되고, 페이지 코드나 저장소에는 들어가지 않아요.</p>' +
+    '<div class="fields"><div class="field"><label for="g-owner">GitHub 사용자명</label><input id="g-owner" name="owner" autocomplete="off" value="' + esc(own.token ? own.owner || '' : '') + '"></div>' +
+    '<div class="field"><label for="g-repo">비공개 저장소 이름</label><input id="g-repo" name="repo" autocomplete="off" value="' + esc(own.token ? own.repo || '' : '') + '"></div></div>' +
+    '<div class="fields"><div class="field"><label for="g-branch">브랜치 (비우면 기본)</label><input id="g-branch" name="branch" autocomplete="off" value="' + esc(own.branch || '') + '"></div>' +
+    '<div class="field"><label for="g-path">파일 경로</label><input id="g-path" name="path" autocomplete="off" value="' + esc(own.path || 'plantcare/data.json') + '"></div></div>' +
+    '<div class="field"><label for="g-token">토큰</label><input id="g-token" name="token" type="password" autocomplete="off" placeholder="' + (own.token ? '저장됨 — 바꿀 때만 입력' : 'github_pat_…') + '"></div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap"><button type="submit" class="btn primary">저장하고 동기화</button><button type="button" class="btn" data-act="sync-now">지금 동기화</button>' +
+    (own.token ? '<button type="button" class="btn danger" data-act="gh-clear">따로 넣은 토큰 삭제</button>' : '') + '</div></form>';
+  // 위치·온습도계
+  var sopts = live(DATA.spots).sort(byOrder).filter(function (s) { return !s.outdoor; }).map(function (s) {
+    return '<option value="' + esc(s.id) + '"' + (s.id === DATA.settings.thermoSpotId ? ' selected' : '') + '>' + esc(s.name) + '</option>';
+  }).join('');
+  h += '<form class="card" data-form="loc" aria-labelledby="loc-t"><h2 id="loc-t">온습도계 · 날씨 위치</h2>' +
+    '<div class="fields"><div class="field"><label for="l-thermo">온습도계를 둔 자리</label><select id="l-thermo" name="thermoSpotId">' + sopts + '</select></div>' +
+    '<div class="field"><label for="l-name">지역 이름</label><input id="l-name" name="placeName" value="' + esc(DATA.settings.placeName || '') + '"></div></div>' +
+    '<div class="fields"><div class="field"><label for="l-lat">위도</label><input id="l-lat" name="lat" type="number" step="0.001" value="' + esc(DATA.settings.lat) + '"></div>' +
+    '<div class="field"><label for="l-lon">경도</label><input id="l-lon" name="lon" type="number" step="0.001" value="' + esc(DATA.settings.lon) + '"></div></div>' +
+    '<div><button type="submit" class="btn primary">저장</button></div></form>';
+  // 다른 페이지 링크
+  h += '<form class="card" data-form="link" aria-labelledby="ln-t"><h2 id="ln-t">리마인더 링크</h2>' +
+    '<p class="s13 muted" style="margin:0">홈 상단 "리마인더" 버튼이 여는 주소예요. 같은 저장소의 plants 폴더에 올렸다면 기본값(../) 그대로 두면 돼요.</p>' +
+    '<div class="field"><label for="ln-url">리마인더 주소</label><input id="ln-url" name="reminderUrl" autocomplete="off" value="' + esc(DATA.settings.reminderUrl || '../') + '"></div>' +
+    '<div><button type="submit" class="btn primary">저장</button></div></form>';
+  // 자리
+  h += '<section class="card" aria-labelledby="sp-t"><div class="card-head" style="align-items:center"><h2 id="sp-t">자리 관리</h2><a class="btn small" href="#/spot/new">자리 추가</a></div><ul class="spotlist">';
+  live(DATA.spots).sort(byOrder).forEach(function (s) {
+    var n = live(DATA.plants).filter(function (p) { return p.spotId === s.id; }).length;
+    h += '<li><span><b>' + esc(s.name) + '</b><br><span class="small muted">' + esc(spotDesc(s)) + ' · ' + n + '그루</span></span><a class="btn small" href="#/spot/' + encodeURIComponent(s.id) + '">편집</a></li>';
+  });
+  h += '</ul></section>';
+  // 백업
+  h += '<section class="card" aria-labelledby="bk-t"><h2 id="bk-t">백업</h2><p class="s13 muted" style="margin:0">가져오기는 지금 데이터와 합쳐요(덮어쓰지 않음).</p>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" data-act="export">내보내기 (JSON)</button><button type="button" class="btn" data-act="import">가져오기</button>' +
+    '<input type="file" id="import-file" accept="application/json,.json" hidden></div></section>';
+  h += '<section class="card" aria-labelledby="rs-t"><h2 id="rs-t">초기화</h2><p class="s13 muted" style="margin:0">이 기기에 저장된 데이터만 지워요. 동기화를 켜 두었다면 다음 동기화 때 저장소에서 다시 받아와요.</p><div><button type="button" class="btn danger" data-act="reset">이 기기 데이터 지우기</button></div></section>';
+  h += footer();
+  return h + '</div>';
+}
+
+/* ----- 오버레이 ----- */
+function overlayHtml(r, all, today) {
+  if (r.overlay === 'check') return checkSheet(r.id, all, today);
+  if (r.overlay === 'edit') return editSheet(r.id, today);
+  if (r.overlay === 'spot') return spotSheet(r.id);
+  if (r.overlay === 'info') return infoSheet(r.id, r.key);
+  return '';
+}
+function sheet(title, body, foot, labelId) {
+  return '<div class="ov" data-act="ov-bg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="' + labelId + '">' +
+    '<div class="sheet-h"><button type="button" class="btn small" data-act="close">닫기</button><b id="' + labelId + '">' + title + '</b><span style="min-width:60px" aria-hidden="true"></span></div>' +
+    '<div class="sheet-b">' + body + '</div>' + (foot ? '<div class="sheet-f">' + foot + '</div>' : '') + '</div></div>';
+}
+function checkSheet(id, all, today) {
+  var p = DATA.plants[id];
+  if (!p || p.deleted) return sheet('흙 확인', '<p>식물을 찾을 수 없어요.</p>', '', 'ck-t');
+  if (!CHECK || CHECK.plantId !== id) CHECK = { plantId: id, mode: p.sustee ? 'sustee' : 'finger', result: null, leaf: 'normal', checks: {}, note: '' };
+  var sp = SPECIES[p.species] || SPECIES.wilma, st = all.states[id], spot = DATA.spots[p.spotId];
+  var sus = CHECK.mode === 'sustee';
+  var opts = sus ? [
+    { v: 'moist', b: '파랑', s: '아직 수분이 충분해요' },
+    { v: 'top', b: '흰색', s: '말랐어요' },
+    { v: 'dry', b: '흰색 + 화분이 눈에 띄게 가벼움', s: '흰색이 된 지 꽤 지났어요' }
+  ] : [
+    { v: 'moist', b: '아직 촉촉해요', s: '손가락에 흙이 묻어나요' },
+    { v: 'top', b: '겉만 말랐어요', s: '위는 보송, 속은 살짝 축축' },
+    { v: 'dry', b: '속까지 바싹 말랐어요', s: '화분이 눈에 띄게 가벼워요' }
+  ];
+  var b = '<div class="card" style="padding:14px 16px;gap:4px"><b style="font-size:18px">' + esc(p.name) + '</b><span class="s13 muted">' + esc((spot ? spot.name + ' · ' : '') + st.rule + ' · 남은 수분 ' + Math.round(st.M) + '%') + '</span></div>';
+  b += '<div class="step"><h3>1. ' + (sus ? '사스티 색은?' : '손가락을 흙 속 3~5cm까지 넣어 보세요') + '</h3>';
+  opts.forEach(function (o) {
+    b += '<button type="button" class="opt" aria-pressed="' + (CHECK.result === o.v) + '" data-act="res" data-v="' + o.v + '"><span class="dot" aria-hidden="true"></span><span class="ol"><b>' + o.b + '</b><span class="small muted">' + o.s + '</span></span></button>';
+  });
+  if (p.sustee) b += '<div><button type="button" class="linkbtn" data-act="mode">' + (sus ? '손가락으로 확인할게요' : '사스티 색으로 확인할게요') + '</button></div>';
+  b += '</div>';
+  var v = null;
+  if (CHECK.result) {
+    v = verdictFor(p, CHECK.result, CHECK.leaf, st, all.env, today, { sustee: sus });
+    b += '<div class="note ' + v.tone + '" role="status"><b>' + esc(v.title) + '</b>' + esc(v.body) + '</div>';
+  }
+  b += '<div class="step"><h3>2. 잎 상태는 어때요?</h3><div style="display:flex;flex-wrap:wrap;gap:8px">';
+  LEAF_OPTIONS.forEach(function (o) { b += '<button type="button" class="pill" aria-pressed="' + (CHECK.leaf === o.id) + '" data-act="leaf" data-v="' + o.id + '">' + o.label + '</button>'; });
+  b += '</div>';
+  if (v) v.warns.forEach(function (w) { b += '<div class="note ' + w.level + '" role="alert"><b>' + esc(w.title) + '</b>' + esc(w.body) + '</div>'; });
+  b += '</div>';
+  if (v && v.action === 'water') {
+    b += '<div class="step"><h3>3. 물 준 뒤 체크</h3>';
+    afterChecks(p).forEach(function (c) {
+      b += '<label class="check"><input type="checkbox" data-chk="' + c.key + '"' + (CHECK.checks[c.key] ? ' checked' : '') + '>' + c.label + '</label>';
+    });
+    b += '</div>';
+  }
+  b += '<div class="field"><label for="check-note">메모 (선택)</label><textarea id="check-note" style="min-height:70px" placeholder="예: 새 잎이 나옴">' + esc(CHECK.note) + '</textarea></div>';
+  var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="button" class="btn primary" data-act="save-check"' + (CHECK.result ? '' : ' disabled') + '>기록 저장</button>';
+  return sheet('흙 확인', b, foot, 'ck-t');
+}
+function editSheet(id, today) {
+  var isNew = id === 'new';
+  var p = isNew ? { name: '', species: 'wilma', spotId: (live(DATA.spots).sort(byOrder)[0] || {}).id, potSize: null, potMaterial: null, base: null, sustee: false } : DATA.plants[id];
+  if (!p || p.deleted) return sheet('화분 정보', '<p>식물을 찾을 수 없어요.</p>', '', 'ed-t');
+  function opt(v, label, cur) { return '<option value="' + esc(v) + '"' + (String(cur == null ? '' : cur) === String(v) ? ' selected' : '') + '>' + esc(label) + '</option>'; }
+  var spOpts = Object.keys(SPECIES).map(function (k) { return opt(k, SPECIES[k].full, p.species); }).join('');
+  var spotOpts = live(DATA.spots).sort(byOrder).map(function (s) { return opt(s.id, s.name, p.spotId); }).join('');
+  var b = '<form id="plant-form" data-form="plant" data-id="' + esc(id) + '" style="display:flex;flex-direction:column;gap:14px">' +
+    '<div class="field"><label for="e-name">이름</label><input id="e-name" name="name" required maxlength="30" value="' + esc(p.name) + '"></div>' +
+    '<div class="fields"><div class="field"><label for="e-sp">종류</label><select id="e-sp" name="species">' + spOpts + '</select></div>' +
+    '<div class="field"><label for="e-spot">자리</label><select id="e-spot" name="spotId">' + spotOpts + '</select></div></div>' +
+    '<div class="fields"><div class="field"><label for="e-size">화분 지름 (cm)</label><input id="e-size" name="potSize" type="number" min="3" max="80" step="0.5" inputmode="decimal" placeholder="모르면 비워두기" value="' + (p.potSize != null ? esc(p.potSize) : '') + '"></div>' +
+    '<div class="field"><label for="e-mat">재질</label><select id="e-mat" name="potMaterial">' + opt('', '미입력', p.potMaterial) + opt('plastic', '플라스틱', p.potMaterial) + opt('clay', '토분(테라코타)', p.potMaterial) + opt('ceramic', '유약 도자기', p.potMaterial) + opt('other', '기타', p.potMaterial) + '</select></div></div>' +
+    '<div class="field"><label for="e-base">받침</label><select id="e-base" name="base">' + opt('', '미입력', p.base) + opt('none', '없음', p.base) + opt('saucer', '물받이 접시', p.base) + opt('stand', '띄움 받침대 (화분 다리)', p.base) + '</select></div>' +
+    '<label class="check"><input type="checkbox" name="sustee"' + (p.sustee ? ' checked' : '') + '>사스티(수분 체커)를 꽂아 두었어요</label>';
+  if (isNew) b += '<div class="field"><label for="e-start">지금 흙 상태</label><select id="e-start" name="startMoisture">' + opt('100', '방금 물 줌', '60') + opt('60', '보통 / 모르겠음', '60') + opt('35', '말라 있음', '60') + '</select></div>';
+  b += '<p class="small muted" style="margin:0">화분 지름: 3호 ≈ 9cm, 4호 ≈ 12cm, 5호 ≈ 15cm, 6호 ≈ 18cm, 7호 ≈ 21cm</p>';
+  if (!isNew) b += '<div><button type="button" class="btn danger" data-act="del-plant" data-id="' + esc(id) + '">이 식물 삭제</button></div>';
+  b += '</form>';
+  var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="submit" form="plant-form" class="btn primary">저장</button>';
+  return sheet(isNew ? '식물 추가' : '화분 정보 수정', b, foot, 'ed-t');
+}
+function spotSheet(id) {
+  var isNew = id === 'new';
+  var s = isNew ? { name: '', outdoor: false, sun: 'mid', rain: false, vent: 'normal', moistSource: false, summerShade: false } : DATA.spots[id];
+  if (!s || s.deleted) return sheet('자리', '<p>자리를 찾을 수 없어요.</p>', '', 'sp-t2');
+  function opt(v, label, cur) { return '<option value="' + v + '"' + (cur === v ? ' selected' : '') + '>' + label + '</option>'; }
+  var b = '<form id="spot-form" data-form="spot" data-id="' + esc(id) + '" style="display:flex;flex-direction:column;gap:14px">' +
+    '<div class="field"><label for="s-name">이름</label><input id="s-name" name="name" required maxlength="30" value="' + esc(s.name) + '"></div>' +
+    '<label class="check"><input type="checkbox" name="outdoor"' + (s.outdoor ? ' checked' : '') + '>실외 (날씨 자동 반영)</label>' +
+    '<div class="fields"><div class="field"><label for="s-sun">햇빛</label><select id="s-sun" name="sun">' + opt('high', '해가 잘 듦', s.sun) + opt('mid', '보통', s.sun) + opt('low', '해가 적음 / 밝은 그늘', s.sun) + '</select></div>' +
+    '<div class="field"><label for="s-vent">환기</label><select id="s-vent" name="vent">' + opt('good', '좋음', s.vent) + opt('normal', '보통', s.vent) + opt('poor', '나쁨', s.vent) + '</select></div></div>' +
+    '<label class="check"><input type="checkbox" name="rain"' + (s.rain ? ' checked' : '') + '>비를 맞는 자리 (실외)</label>' +
+    '<label class="check"><input type="checkbox" name="moistSource"' + (s.moistSource ? ' checked' : '') + '>욕실·주방처럼 습기가 모이는 곳 근처</label>' +
+    '<label class="check"><input type="checkbox" name="summerShade"' + (s.summerShade ? ' checked' : '') + '>여름엔 블라인드·커튼으로 가림</label>';
+  if (!isNew) b += '<div><button type="button" class="btn danger" data-act="del-spot" data-id="' + esc(id) + '">이 자리 삭제</button></div>';
+  b += '</form>';
+  var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="submit" form="spot-form" class="btn primary">저장</button>';
+  return sheet(isNew ? '자리 추가' : '자리 편집', b, foot, 'sp-t2');
+}
+function infoSheet(species, key) {
+  var sp = SPECIES[species];
+  var tab = INFO_TABS.filter(function (t) { return t.key === key; })[0];
+  if (!sp || !tab) return sheet('기르는 법', '<p>항목을 찾을 수 없어요.</p>', '', 'in-t');
+  var hint = key === 'seasons' ? '한 줄에 한 계절: 계절 | 물 | 빛·온도 | 그 외' : key === 'trouble' ? '한 줄에 하나: 증상 → 원인·대처' : '한 줄이 한 문단이에요.';
+  var b = '<form id="info-form" data-form="info" data-sp="' + esc(species) + '" data-key="' + esc(key) + '" style="display:flex;flex-direction:column;gap:12px">' +
+    '<div class="field"><label for="i-text">' + esc(sp.full) + ' — ' + tab.label + '</label><textarea id="i-text" name="text" style="min-height:260px">' + esc(infoText(DATA, species, key)) + '</textarea></div>' +
+    '<p class="small muted" style="margin:0">' + hint + '</p>' +
+    '<div><button type="button" class="btn small" data-act="info-reset" data-sp="' + esc(species) + '" data-key="' + esc(key) + '">기본 문구로 되돌리기</button></div></form>';
+  var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="submit" form="info-form" class="btn primary">저장</button>';
+  return sheet('기르는 법 편집', b, foot, 'in-t');
+}
+
+/* ===== 동작 ===== */
+function onAct(act, el) {
+  var today = todayStr();
+  if (act === 'close') return closeOverlay();
+  if (act === 'banner-off') { UI.bannerOff = true; saveUI(); return render(); }
+  if (act === 'focus-reading') {
+    var inp = document.getElementById('r-temp');
+    if (inp) { inp.scrollIntoView({ block: 'center', behavior: 'smooth' }); inp.focus(); }
+    return;
+  }
+  if (act === 'retry-weather') return loadWeather(true);
+  if (act === 'water') {
+    var id = el.getAttribute('data-id');
+    return commit(function (d) { var l = newLog({ plantId: id, type: 'water' }); d.logs[l.id] = l; }, '물 준 것을 기록했어요');
+  }
+  if (act === 'del-log') {
+    var lid = el.getAttribute('data-id');
+    if (!confirm('이 기록을 삭제할까요?')) return;
+    return commit(function (d) { var l = d.logs[lid]; if (l) { l.deleted = true; l.updatedAt = Date.now(); } }, '기록을 삭제했어요');
+  }
+  if (act === 'tab') {
+    UI.infoTab = UI.infoTab || {};
+    UI.infoTab[el.getAttribute('data-sp')] = el.getAttribute('data-key');
+    saveUI();
+    return render();
+  }
+  if (act === 'res') { CHECK.result = el.getAttribute('data-v'); return render(); }
+  if (act === 'leaf') { CHECK.leaf = el.getAttribute('data-v'); return render(); }
+  if (act === 'mode') { CHECK.mode = CHECK.mode === 'sustee' ? 'finger' : 'sustee'; CHECK.result = null; return render(); }
+  if (act === 'save-check') return saveCheck(today);
+  if (act === 'sync-now') return syncNow();
+  if (act === 'gh-clear') {
+    if (!confirm('이 기기에서 따로 넣은 GitHub 토큰을 지울까요? 데이터는 남아 있어요. (리마인더 연결이 있으면 그걸 함께 써요)')) return;
+    var c = Store.get(LS.gh) || {}; Store.set(LS.gh, { path: c.path, branch: c.branch });
+    SYNC.state = 'off'; render(); return toast('토큰을 지웠어요');
+  }
+  if (act === 'export') return exportData(today);
+  if (act === 'import') { var f = document.getElementById('import-file'); if (f) f.click(); return; }
+  if (act === 'reset') {
+    if (!confirm('이 기기의 식물 데이터를 모두 지울까요?')) return;
+    if (!confirm('정말 지울까요? 동기화를 쓰지 않았다면 되돌릴 수 없어요.')) return;
+    Store.del(LS.data); Store.del(LS.wx); location.hash = '#/'; location.reload(); return;
+  }
+  if (act === 'del-plant') {
+    var pid = el.getAttribute('data-id');
+    if (!confirm('이 식물을 삭제할까요? 기록은 백업에 남아요.')) return;
+    overlayPushed = false;
+    DATA.plants[pid].deleted = true; DATA.plants[pid].updatedAt = Date.now();
+    Store.set(LS.data, DATA); scheduleSync();
+    replaceHash('#/');
+    return toast('삭제했어요');
+  }
+  if (act === 'del-spot') {
+    var sid = el.getAttribute('data-id');
+    var n = live(DATA.plants).filter(function (p) { return p.spotId === sid; }).length;
+    if (n) return alert('이 자리에 식물이 ' + n + '그루 있어요. 먼저 다른 자리로 옮겨주세요.');
+    if (!confirm('이 자리를 삭제할까요?')) return;
+    commit(function (d) { var s = d.spots[sid]; if (s) { s.deleted = true; s.updatedAt = Date.now(); } }, '자리를 삭제했어요');
+    return closeOverlay();
+  }
+  if (act === 'info-reset') {
+    var key = el.getAttribute('data-sp') + '.' + el.getAttribute('data-key');
+    commit(function (d) { d.info[key] = { text: null, deleted: true, updatedAt: Date.now() }; }, '기본 문구로 되돌렸어요');
+    return closeOverlay();
+  }
+}
+function saveCheck(today) {
+  var p = DATA.plants[CHECK.plantId];
+  if (!p || !CHECK.result) return;
+  var all = computeAll(DATA, WEATHER, today);
+  var st = all.states[p.id];
+  var v = verdictFor(p, CHECK.result, CHECK.leaf, st, all.env, today, { sustee: CHECK.mode === 'sustee' });
+  var checks = {};
+  if (v.action === 'water') afterChecks(p).forEach(function (c) { checks[c.key] = !!CHECK.checks[c.key]; });
+  var log = newLog({ plantId: p.id, type: 'check', result: CHECK.result, leaf: CHECK.leaf, action: v.action, waitDays: v.action === 'wait' ? v.waitDays : null, sustee: CHECK.mode === 'sustee', checks: checks, note: (CHECK.note || '').trim() });
+  CHECK = null;
+  DATA.logs[log.id] = log;
+  Store.set(LS.data, DATA);
+  scheduleSync();
+  var st2 = simulate(p, DATA, buildEnv(DATA, WEATHER), today);
+  closeOverlay();
+  toast((v.action === 'water' ? '물 준 것까지 기록했어요' : '기록했어요') + ' · 다음 확인 ' + relDay(st2.next, today));
+}
+function onSubmit(form) {
+  var kind = form.getAttribute('data-form');
+  var fd = new FormData(form);
+  var now = Date.now();
+  var today = todayStr();
+  if (kind === 'reading') {
+    var date = (document.getElementById('read-date') || {}).value || today;
+    if (date > today) date = today;
+    var temp = parseFloat(fd.get('temp')), hum = parseFloat(fd.get('hum')), tminRaw = fd.get('tmin');
+    var tmin = tminRaw === '' || tminRaw == null ? null : parseFloat(tminRaw);
+    if (!isFinite(temp) || temp < -15 || temp > 50) return toast('온도를 확인해 주세요 (-15~50℃)');
+    if (!isFinite(hum) || hum < 1 || hum > 100) return toast('습도를 확인해 주세요 (1~100%)');
+    if (tmin != null && (!isFinite(tmin) || tmin < -20 || tmin > 50)) return toast('밤 최저 온도를 확인해 주세요');
+    if (document.activeElement) document.activeElement.blur();
+    READ_DATE = date === today ? null : date;
+    return commit(function (d) { d.readings[date] = { date: date, temp: temp, hum: Math.round(hum), tmin: tmin, updatedAt: now }; }, '온습도를 저장했어요');
+  }
+  if (kind === 'plant') {
+    var id = form.getAttribute('data-id');
+    var name = String(fd.get('name') || '').trim();
+    if (!name) return toast('이름을 입력해 주세요');
+    var size = fd.get('potSize');
+    var o = {
+      name: name, species: fd.get('species'), spotId: fd.get('spotId'),
+      potSize: size === '' || size == null ? null : parseFloat(size),
+      potMaterial: fd.get('potMaterial') || null, base: fd.get('base') || null,
+      sustee: fd.get('sustee') === 'on', updatedAt: now
+    };
+    if (id === 'new') {
+      var nid = uid('p');
+      var maxOrder = live(DATA.plants).reduce(function (m, p) { return Math.max(m, p.order || 0); }, 0);
+      o.id = nid; o.created = today; o.startMoisture = parseFloat(fd.get('startMoisture')) || 60; o.order = maxOrder + 1;
+      DATA.plants[nid] = o;
+      Store.set(LS.data, DATA); scheduleSync();
+      overlayPushed = false;
+      DIRTY = {};
+      replaceHash('#/plant/' + encodeURIComponent(nid));
+      return toast('식물을 추가했어요');
+    }
+    commit(function (d) { var p = d.plants[id]; for (var k in o) p[k] = o[k]; }, '저장했어요');
+    return closeOverlay();
+  }
+  if (kind === 'spot') {
+    var sid = form.getAttribute('data-id');
+    var sname = String(fd.get('name') || '').trim();
+    if (!sname) return toast('이름을 입력해 주세요');
+    var so = { name: sname, outdoor: fd.get('outdoor') === 'on', sun: fd.get('sun'), vent: fd.get('vent'), rain: fd.get('rain') === 'on', moistSource: fd.get('moistSource') === 'on', summerShade: fd.get('summerShade') === 'on', updatedAt: now };
+    commit(function (d) {
+      if (sid === 'new') {
+        var ns = uid('s');
+        so.id = ns; so.order = live(d.spots).reduce(function (m, s) { return Math.max(m, s.order || 0); }, 0) + 1;
+        d.spots[ns] = so;
+      } else { var s = d.spots[sid]; for (var k in so) s[k] = so[k]; }
+    }, '자리를 저장했어요');
+    return closeOverlay();
+  }
+  if (kind === 'info') {
+    var key = form.getAttribute('data-sp') + '.' + form.getAttribute('data-key');
+    var text = String(fd.get('text') || '');
+    commit(function (d) { d.info[key] = { text: text, updatedAt: now }; }, '기르는 법을 저장했어요');
+    return closeOverlay();
+  }
+  if (kind === 'gh') {
+    var prev = Store.get(LS.gh) || {};
+    var tok = String(fd.get('token') || '').trim() || prev.token || '';
+    var cfg = {
+      owner: String(fd.get('owner') || '').trim(), repo: String(fd.get('repo') || '').trim().replace(/\.git$/, ''),
+      branch: String(fd.get('branch') || '').trim(), path: String(fd.get('path') || '').trim().replace(/^\/+/, '') || 'plantcare/data.json',
+      token: tok, verified: false
+    };
+    if (!cfg.token) {
+      // 토큰 없이 저장 = 리마인더 연결을 함께 씀 (경로·브랜치만 반영)
+      Store.set(LS.gh, { path: cfg.path, branch: cfg.branch });
+      render(); toast('저장했어요');
+      return syncNow();
+    }
+    if (!cfg.owner || !cfg.repo) return toast('사용자명과 저장소 이름을 입력해 주세요');
+    Store.set(LS.gh, cfg);
+    SYNC.state = 'syncing'; updateSyncChip();
+    return GH.repoInfo(cfg).then(function (info) {
+      if (!info || info.private !== true) {
+        SYNC.state = 'error'; SYNC.msg = '공개(Public) 저장소예요. 기록이 누구에게나 보이니 비공개 저장소를 써 주세요';
+        updateSyncChip(); return toast('비공개 저장소만 연결할 수 있어요');
+      }
+      cfg.verified = true; Store.set(LS.gh, cfg);
+      render(); toast('동기화 설정을 저장했어요');
+      return syncNow();
+    }).catch(function (e) {
+      SYNC.state = 'error'; SYNC.msg = e && e.status ? e.message : '오프라인이거나 GitHub에 연결할 수 없어요';
+      updateSyncChip();
+    });
+  }
+  if (kind === 'link') {
+    var u = String(fd.get('reminderUrl') || '').trim() || '../';
+    if (/^(javascript|data|vbscript):/i.test(u)) return toast('주소를 확인해 주세요');
+    return commit(function (d) { d.settings = Object.assign({}, d.settings, { reminderUrl: u, updatedAt: now }); }, '링크를 저장했어요');
+  }
+  if (kind === 'loc') {
+    var lat = parseFloat(fd.get('lat')), lon = parseFloat(fd.get('lon'));
+    if (!isFinite(lat) || !isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return toast('위도·경도를 확인해 주세요');
+    commit(function (d) {
+      d.settings = Object.assign({}, d.settings, { lat: lat, lon: lon, placeName: String(fd.get('placeName') || '').trim(), thermoSpotId: fd.get('thermoSpotId') || d.settings.thermoSpotId, updatedAt: now });
+    }, '저장했어요');
+    return loadWeather(true);
+  }
+}
+function exportData(today) {
+  var blob = new Blob([JSON.stringify(DATA, null, 1)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'plantcare-backup-' + today + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+}
+function importFile(file) {
+  var rd = new FileReader();
+  rd.onload = function () {
+    try {
+      var d = normalizeData(JSON.parse(rd.result));
+      if (!d.plants || typeof d.plants !== 'object') throw new Error('형식');
+      commit(function () { DATA = mergeData(DATA, d); }, '가져와서 합쳤어요');
+    } catch (e) { toast('파일을 읽지 못했어요 — 이 페이지에서 내보낸 JSON인지 확인해 주세요'); }
+  };
+  rd.readAsText(file);
+}
+
+/* ===== 동기화 ===== */
+function scheduleSync() {
+  if (!GH.configured(GH.cfg())) return;
+  clearTimeout(SYNC.timer);
+  SYNC.timer = setTimeout(syncNow, 1500);
+}
+function syncNow() {
+  var c = GH.cfg();
+  if (!GH.configured(c)) { SYNC.state = 'off'; updateSyncChip(); return Promise.resolve(); }
+  if (SYNC.running) { SYNC.pending = true; return Promise.resolve(); }
+  SYNC.running = true; SYNC.state = 'syncing'; updateSyncChip();
+  var attempt = 0;
+  function once() {
+    return GH.get(c).then(function (remote) {
+      var rdata = remote.exists ? normalizeData(remote.data) : null;
+      var merged = rdata ? mergeData(DATA, rdata) : DATA;
+      if (stableString(merged) !== stableString(DATA)) { DATA = merged; Store.set(LS.data, DATA); requestRender(); }
+      if (rdata && stableString(merged) === stableString(rdata)) return null;
+      return GH.put(c, merged, remote.sha).catch(function (e) {
+        if ((e.status === 409 || e.status === 422) && ++attempt < 3) return once();
+        throw e;
+      });
+    });
+  }
+  return once().then(function () {
+    SYNC.state = 'ok'; SYNC.last = new Date(); SYNC.msg = '';
+  }).catch(function (e) {
+    SYNC.state = 'error';
+    SYNC.msg = e && e.status ? e.message : '오프라인이거나 GitHub에 연결할 수 없어요';
+  }).then(function () {
+    SYNC.running = false; updateSyncChip();
+    if (SYNC.pending) { SYNC.pending = false; syncNow(); }
+  });
+}
+
+/* ===== 날씨 ===== */
+function loadWeather(force) {
+  var s = DATA.settings || {};
+  var lat = +s.lat, lon = +s.lon;
+  if (!isFinite(lat) || !isFinite(lon)) return;
+  if (!force && WEATHER && WEATHER.lat === lat && WEATHER.lon === lon && Date.now() - WEATHER.fetchedAt < 3 * 3600 * 1000) return;
+  if (WX.loading) return;
+  WX.loading = true; WX.error = null; requestRender();
+  fetchWeather(lat, lon, WEATHER).then(function (w) {
+    WEATHER = w; Store.set(LS.wx, w);
+  }).catch(function (e) {
+    WX.error = (e && e.message) || '불러오지 못했어요';
+  }).then(function () { WX.loading = false; requestRender(); });
+}
+
+/* ===== 시작 ===== */
+function init() {
+  var saved = Store.get(LS.data);
+  DATA = saved ? normalizeData(saved) : seedData(todayStr());
+  if (!saved) Store.set(LS.data, DATA);
+  WEATHER = Store.get(LS.wx);
+  UI = Store.get(LS.ui) || { bannerOff: false, infoTab: {} };
+  var r0 = parseRoute();
+  if (r0.overlay) lastBase = '#/';
+  else lastBase = location.hash || '#/';
+  render();
+  loadWeather(false);
+  syncNow();
+
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-act]');
+    if (!el) return;
+    if (el.getAttribute('data-act') === 'ov-bg') { if (e.target === el) closeOverlay(); return; }
+    onAct(el.getAttribute('data-act'), el);
+  });
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.matches('[data-task]')) {
+      var key = t.getAttribute('data-task'), done = t.checked, today = todayStr();
+      return commit(function (d) { d.tasks[today + '|' + key] = { done: done, updatedAt: Date.now() }; });
+    }
+    if (t.matches('[data-chk]')) { CHECK.checks[t.getAttribute('data-chk')] = t.checked; return; }
+    if (t.id === 'read-date') {
+      READ_DATE = t.value || null;
+      delete DIRTY['r-temp']; delete DIRTY['r-hum']; delete DIRTY['r-tmin'];
+      t.blur(); return render();
+    }
+    if (t.id === 'import-file' && t.files && t.files[0]) { importFile(t.files[0]); t.value = ''; return; }
+    if (t.id && t.closest('form')) DIRTY[t.id] = true;
+  });
+  document.addEventListener('input', function (e) {
+    if (e.target.id === 'check-note' && CHECK) { CHECK.note = e.target.value; return; }
+    if (e.target.id && e.target.closest('form')) DIRTY[e.target.id] = true;
+  });
+  document.addEventListener('submit', function (e) { e.preventDefault(); onSubmit(e.target); DIRTY = {}; });
+  document.addEventListener('pointerdown', function () { POINTER_DOWN = true; }, true);
+  document.addEventListener('pointerup', function () { setTimeout(function () { POINTER_DOWN = false; }, 0); }, true);
+  document.addEventListener('pointercancel', function () { POINTER_DOWN = false; }, true);
+  document.addEventListener('focusout', function () {
+    setTimeout(function () { if (NEED_RENDER && !isEditing() && !POINTER_DOWN && !/^(edit|spot|info)$/.test(parseRoute().overlay || '')) render(); }, 350);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && parseRoute().overlay) closeOverlay();
+  });
+  window.addEventListener('hashchange', function () {
+    var r = parseRoute();
+    if (r.overlay) { if (!overlayPushed) overlayPushed = true; }
+    else {
+      overlayPushed = false;
+      var nb = location.hash || '#/';
+      if (nb !== lastBase) { DIRTY = {}; window.scrollTo(0, 0); }
+      lastBase = nb; CHECK = null;
+    }
+    render();
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') { loadWeather(false); syncNow(); requestRender(); }
+  });
+  setInterval(function () { requestRender(); }, 5 * 60 * 1000);
+}
+if (typeof window !== 'undefined' && !window.__PLANTCARE_TEST__) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+}
+
+</script>
+</body>
+</html>

@@ -54,6 +54,8 @@
   .tools { display: flex; gap: 8px; }
   .btn-ghost { display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 12px; background: #FFFFFF; color: var(--ink2); font-size: 15px; font-weight: 500; white-space: nowrap; }
   .btn-ghost:hover { border-color: var(--line2); }
+  a.btn-ghost { text-decoration: none; }
+  .plant-link-m { display: none; }
   .btn-square { width: 44px; padding: 0; }
   .ico { position: relative; display: flex; }
   .sync-dot { position: absolute; top: -3px; right: -5px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid #FFFFFF; box-sizing: content-box; }
@@ -175,7 +177,9 @@
     header.top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
     .titlebox { order: 1; gap: 2px; }
     .tools { order: 2; gap: 6px; }
-    header.top .seg { order: 3; grid-column: 1 / -1; }
+    header.top .seg { order: 3; grid-column: 1 / 2; }
+    .tools .plant-link { display: none; }
+    header.top .plant-link-m { display: flex; order: 4; grid-column: 2 / 3; align-self: center; height: 52px; }
     .seg button { flex: 1 1 0; padding: 0 12px; }
     h1 { font-size: 22px; }
     .date { font-size: 14px; }
@@ -237,7 +241,8 @@
     back: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
     close: '<path d="M6 6l12 12"/><path d="M18 6 6 18"/>',
     check: '<path d="m5 12 5 5 9-10"/>',
-    cloud: '<path d="M17.5 19H7a5 5 0 1 1 1-9.9A6 6 0 0 1 19.4 10 4.5 4.5 0 0 1 17.5 19z"/>'
+    cloud: '<path d="M17.5 19H7a5 5 0 1 1 1-9.9A6 6 0 0 1 19.4 10 4.5 4.5 0 0 1 17.5 19z"/>',
+    leaf: '<path d="M5 20c0-9 5.5-15 15-15 0 9.5-6 15-15 15z"/><path d="M5 20 13 12"/>'
   };
   function svg(paths, size, sw) {
     size = size || 18; sw = sw || 2;
@@ -613,7 +618,9 @@
     h += '<header class="top">' +
       '<div class="titlebox"><p class="date">' + esc(fmtDay(today)) + '</p><h1>' + esc(MODE_INFO[mode].heading) + '</h1></div>' +
       modeSwitch(mode) +
+      '<a class="btn-ghost plant-link-m" href="plants/" aria-label="식물 관리 페이지로">' + svg(P.leaf) + '식물</a>' +
       '<div class="tools">' +
+        '<a class="btn-ghost plant-link" href="plants/" aria-label="식물 관리 페이지로">' + svg(P.leaf) + '<span class="lbl">식물</span></a>' +
         syncButtonHtml() +
         '<button type="button" class="btn-ghost" data-act="view" data-view="history" aria-label="기록">' + svg(P.clock) + '<span class="lbl">기록</span></button>' +
         '<button type="button" class="btn-ghost" data-act="open-backup" aria-label="백업">' + svg(P.download) + '<span class="lbl">백업</span></button>' +
