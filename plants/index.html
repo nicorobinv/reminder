@@ -135,6 +135,11 @@ footer.foot{font-size:12px;color:var(--mute);line-height:1.7;text-align:center;p
 .spotlist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line2);font-size:14px}
 @media (min-width:700px){.ov{align-items:center;padding:24px}.sheet{border-radius:16px;max-height:92vh}}
 @media (max-width:520px){.wrap{padding:16px 14px 56px;gap:18px}header.top h1{font-size:22px}.big{font-size:34px}.trouble li{grid-template-columns:1fr;gap:2px}}
+.sched{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.sched li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line2);align-items:baseline}
+.sched .sd{font-size:14px;font-weight:700;color:var(--ink2)}
+.sched .sp{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
+.sched .sp a{font-weight:500}
 
 </style>
 </head>
@@ -272,8 +277,8 @@ var SPECIES = {
       feature: '흰 털로 덮인 뿌리줄기가 흙 위를 기어가듯 자라는 상록 고사리예요. 원래 나무에 붙어 사는 착생 식물이에요.\n습기 있는 밝은 그늘을 좋아해요.',
       water: '봄~가을: 겉흙이 마르면 화분 밑으로 흘러나올 만큼 흠뻑.\n10℃ 아래에선 생장이 느려지니, 겨울엔 겉흙이 마르고 2~3일 뒤에 줘요.\n받침에 고인 물은 버려요.',
       light: '직사광선은 피하고, 레이스 커튼 너머의 밝은 그늘이 좋아요.\n직사광선을 받고 기온까지 높으면 잎이 타요.\n냉난방 바람이 직접 닿지 않게 하세요.',
-      temp: '공기 중 습도를 좋아해요. 엽수(잎 앞뒤에 분무)를 하루 1번 정도 해 주세요. 비 오는 날·습한 날은 생략.\n다만 무레(습기로 인한 통풍 불량)에 약하니 바람은 통하게 해 주세요.\n실내에선 10℃ 이상이면 안심, 5℃ 아래면 잎이 상할 수 있어요.',
-      seasons: '봄~가을 | 겉흙이 마르면 흠뻑 | 밝은 그늘, 직사광선 X | 엽수 매일\n장마 | 겉흙이 마르면 흠뻑 | 통풍 확보 | 습한 날은 엽수 생략\n겨울 | 겉흙이 마르고 2~3일 뒤 | 10℃ 이상 | 난방으로 건조하면 엽수',
+      temp: '공기 중 습도를 좋아해요. 엽수(잎 앞뒤에 물이 맺힐 정도로 분무)를 주 2~3회 이상, 가능하면 매일 해 주세요. 비 오는 날·습한 날은 생략.\n엽수는 흙에 주는 물을 대신하지 않아요. 흙은 따로, 겉흙이 마르면 흠뻑 줘요.\n다만 무레(습기로 인한 통풍 불량)에 약하니 바람은 통하게 해 주세요.\n실내에선 10℃ 이상이면 안심, 5℃ 아래면 잎이 상할 수 있어요.',
+      seasons: '봄~가을 | 겉흙이 마르면 흠뻑 | 밝은 그늘, 직사광선 X | 엽수 주 2~3회 이상 (가능하면 매일)\n장마 | 겉흙이 마르면 흠뻑 | 통풍 확보 | 습한 날은 엽수 생략\n겨울 | 겉흙이 마르고 2~3일 뒤 | 10℃ 이상 | 난방으로 건조하면 엽수',
       trouble: '잎끝·가장자리가 갈색으로 바삭 → 습도 부족·물부족. 엽수 늘리기\n잎이 누렇게 시들고 줄기가 무름 → 과습. 물 간격 늘리기\n잎이 탐 → 직사광선. 밝은 그늘로',
       safety: '확인된 자료가 없어요.'
     }
@@ -419,7 +424,9 @@ function buildEnv(data, weather) {
     readingAt: function (d) {
       var lo = 0, hi = dates.length - 1, ans = -1;
       while (lo <= hi) { var mid = (lo + hi) >> 1; if (dates[mid] <= d) { ans = mid; lo = mid + 1; } else hi = mid - 1; }
-      return ans >= 0 ? data.readings[dates[ans]] : null;
+      // 첫 입력보다 이전 날짜는 가장 가까운(첫) 입력값으로 계산
+      if (ans < 0) return dates.length ? data.readings[dates[0]] : null;
+      return data.readings[dates[ans]];
     },
     latest: function (today) {
       for (var i = dates.length - 1; i >= 0; i--) if (dates[i] <= today) return data.readings[dates[i]];
@@ -712,7 +719,7 @@ function buildTasks(data, env, states, today) {
     var sp = SPECIES[p.species], spot = data.spots[p.spotId], st = states[p.id];
     if (!sp || !spot || spot.outdoor) return;
     if (sp.mist && !(latest && latest.hum >= 70 && daysBetween(latest.date, today) <= 1)) {
-      tasks.push({ key: 'mist:' + p.id, kind: 'toggle', title: p.name + ' · 엽수', sub: '하루 1번 잎 앞뒤에 분무', done: taskDone(data, today, 'mist:' + p.id) });
+      tasks.push({ key: 'mist:' + p.id, kind: 'toggle', title: p.name + ' · 엽수', sub: '잎 앞뒤에 분무 · 가능하면 매일, 못 해도 주 2~3회', done: taskDone(data, today, 'mist:' + p.id) });
     }
     if (sp.nightBlind && st.ctx.coffeeWinter) {
       tasks.push({ key: 'blind:' + p.id, kind: 'toggle', title: p.name + ' · 밤 블라인드 닫기', sub: '창가 냉기 대책', done: taskDone(data, today, 'blind:' + p.id) });
@@ -937,7 +944,7 @@ function isEditing() {
 }
 function requestRender() {
   var r = parseRoute();
-  if (isEditing() || r.overlay === 'edit' || r.overlay === 'spot' || r.overlay === 'info') { NEED_RENDER = true; return; }
+  if (isEditing() || /^(edit|spot|info|water)$/.test(r.overlay || '')) { NEED_RENDER = true; return; }
   render();
 }
 var DIRTY = {};
@@ -980,6 +987,7 @@ function parseRoute(h) {
   else if (p[0] === 'check' && p[1]) { r.overlay = 'check'; r.id = decodeURIComponent(p[1]); }
   else if (p[0] === 'edit' && p[1]) { r.overlay = 'edit'; r.id = decodeURIComponent(p[1]); }
   else if (p[0] === 'spot' && p[1]) { r.overlay = 'spot'; r.id = decodeURIComponent(p[1]); }
+  else if (p[0] === 'water' && p[1]) { r.overlay = 'water'; r.id = decodeURIComponent(p[1]); }
   else if (p[0] === 'info' && p[1] && p[2]) { r.overlay = 'info'; r.id = decodeURIComponent(p[1]); r.key = decodeURIComponent(p[2]); }
   return r;
 }
@@ -1054,6 +1062,7 @@ function pageHome(all, today) {
   }
   h += '<div class="row">' + readingCard(all, today) + weatherCard(today) + alertsCard(all.alerts) + '</div>';
   h += tasksCard(all.tasks);
+  h += scheduleCard(all, today);
   h += '<section aria-labelledby="all-t" style="display:flex;flex-direction:column;gap:20px"><div class="card-head"><h2 id="all-t" style="margin:0;font-size:19px">전체 식물</h2><a href="#/edit/new" class="btn small">식물 추가</a></div>';
   live(DATA.spots).sort(byOrder).forEach(function (s) {
     var ps = plants.filter(function (p) { return p.spotId === s.id; });
@@ -1136,6 +1145,32 @@ function tasksCard(tasks) {
   });
   return h + '</section>';
 }
+function lastWaterText(st, today) {
+  if (st.lastWater) { var n = daysBetween(st.lastWater, today); return pastDay(st.lastWater, today) + (n >= 2 ? ' (' + n + '일 전)' : ''); }
+  if (st.lastRain) return '비 ' + pastDay(st.lastRain, today);
+  return '기록 없음';
+}
+function scheduleCard(all, today) {
+  var plants = plantsSorted(DATA), groups = {}, later = 0;
+  plants.forEach(function (p) {
+    var st = all.states[p.id];
+    var d = st.next <= today ? today : st.next;
+    if (daysBetween(today, d) <= 7) (groups[d] = groups[d] || []).push(p); else later++;
+  });
+  var days = Object.keys(groups).sort();
+  var h = '<section class="card" aria-labelledby="sch-t"><div class="card-head"><h2 id="sch-t">물 주기 예정 (7일)</h2><span class="small muted">예상일이에요 · 그날 흙을 확인하고 결정</span></div>';
+  if (!days.length) h += '<p class="s13 muted" style="margin:0">7일 안에 예정된 식물이 없어요.</p>';
+  else {
+    h += '<ul class="sched">';
+    days.forEach(function (d) {
+      h += '<li><span class="sd">' + (d === today ? '오늘' : relDay(d, today)) + '</span><span class="sp">' +
+        groups[d].map(function (p) { return '<a href="#/plant/' + encodeURIComponent(p.id) + '">' + esc(p.name) + '</a>'; }).join('') + '</span></li>';
+    });
+    h += '</ul>';
+  }
+  if (later) h += '<p class="small muted" style="margin:0">그 이후: ' + later + '그루</p>';
+  return h + '</section>';
+}
 function plantCard(p, st, today) {
   var sp = SPECIES[p.species] || SPECIES.wilma;
   var s = statusOf(st, today);
@@ -1146,7 +1181,7 @@ function plantCard(p, st, today) {
     '<span class="rule">' + esc(st.rule) + '</span>' +
     '<div style="display:flex;flex-direction:column;gap:6px"><div class="kv" style="color:var(--ink2)"><span>남은 수분 (추정)' + (p.sustee ? ' <span class="mini">사스티</span>' : '') + '</span><b>' + pct + '%</b></div>' +
     '<div class="gauge" role="img" aria-label="남은 수분 ' + pct + '%"><i style="width:' + pct + '%;background:' + s.bar + '"></i></div></div>' +
-    '<div class="kv"><span>다음 확인 ' + relDay(st.next, today) + '</span><span>마지막 물 ' + (st.lastWater ? pastDay(st.lastWater, today) : (st.lastRain ? '비 ' + pastDay(st.lastRain, today) : '기록 없음')) + '</span></div></a>';
+    '<div class="kv"><span>물 예정 ' + relDay(st.next, today) + '</span><span>마지막 물 ' + lastWaterText(st, today) + '</span></div></a>';
 }
 
 /* ----- 식물 상세 ----- */
@@ -1205,12 +1240,13 @@ function statusCardHtml(p, sp, st, s, spot, all, today) {
   if (st.snooze && st.snooze > today) reasons.push('지난 흙 확인 결과로 ' + relDay(st.snooze, today) + '까지 확인 보류');
   return '<section class="card f2" aria-labelledby="st-t"><h2 id="st-t">지금 상태</h2>' +
     '<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end"><div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">남은 수분 (추정)</span><span class="big">' + pct + '%</span></div>' +
-    '<div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">다음 흙 확인</span><span style="font-size:22px;font-weight:700;line-height:1.3">' + relDay(st.next, today) + (st.due ? '' : ' 예상') + '</span></div>' +
+    '<div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">다음 물 예정 (흙 확인 후 결정)</span><span style="font-size:22px;font-weight:700;line-height:1.3">' + relDay(st.next, today) + (st.due ? ' · 확인할 때예요' : '') + '</span></div>' +
+    '<div style="display:flex;flex-direction:column;gap:2px"><span class="s13 muted">마지막 물</span><span style="font-size:18px;font-weight:700;line-height:1.3">' + lastWaterText(st, today) + '</span></div>' +
     '<span class="badge" style="background:' + s.bg + ';color:' + s.fg + ';padding:4px 10px">' + s.label + '</span></div>' +
     '<div class="gauge" style="height:10px" role="img" aria-label="남은 수분 ' + pct + '%"><i style="width:' + pct + '%;background:' + s.bar + '"></i></div>' +
     '<div class="reason"><span class="s13" style="font-weight:700;color:var(--ink2)">이렇게 계산했어요</span><ul>' + reasons.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
     '<div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#/check/' + encodeURIComponent(p.id) + '" class="btn primary">흙 확인하기</a>' +
-    '<button type="button" class="btn" data-act="water" data-id="' + esc(p.id) + '">물 줬음 기록</button></div></section>';
+    '<a class="btn" href="#/water/' + encodeURIComponent(p.id) + '">물 줬음 기록</a></div></section>';
 }
 function envCardHtml(p, sp, spot, all, today) {
   if (spot && spot.outdoor) {
@@ -1252,7 +1288,11 @@ function potCardHtml(p, spot) {
     '<dt>등록일</dt><dd>' + esc(p.created || '') + '</dd></dl></section>';
 }
 function logText(l) {
-  if (l.type === 'water') return '물 줌';
+  if (l.type === 'water') {
+    var wx = [];
+    if (l.checks) Object.keys(l.checks).forEach(function (k) { if (l.checks[k] && CHECK_LABEL[k]) wx.push(CHECK_LABEL[k]); });
+    return '물 줌' + (wx.length ? ' · ' + wx.join(' · ') : '') + (l.note ? ' · 메모: ' + l.note : '');
+  }
   if (l.type === 'check') {
     var r = (l.sustee ? RESULT_LABEL_S : RESULT_LABEL)[l.result] || l.result;
     var a = l.action === 'water' ? '물 줌' : (l.waitDays || 2) + '일 뒤 재확인';
@@ -1383,6 +1423,7 @@ function overlayHtml(r, all, today) {
   if (r.overlay === 'edit') return editSheet(r.id, today);
   if (r.overlay === 'spot') return spotSheet(r.id);
   if (r.overlay === 'info') return infoSheet(r.id, r.key);
+  if (r.overlay === 'water') return waterSheet(r.id, all, today);
   return '';
 }
 function sheet(title, body, foot, labelId) {
@@ -1473,6 +1514,31 @@ function spotSheet(id) {
   var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="submit" form="spot-form" class="btn primary">저장</button>';
   return sheet(isNew ? '자리 추가' : '자리 편집', b, foot, 'sp-t2');
 }
+function waterSheet(id, all, today) {
+  var p = DATA.plants[id];
+  if (!p || p.deleted) return sheet('물 줬음 기록', '<p>식물을 찾을 수 없어요.</p>', '', 'wt-t');
+  var st = all.states[id];
+  var minD = addDays(today, -90);
+  var b = '<form id="water-form" data-form="water" data-id="' + esc(id) + '" style="display:flex;flex-direction:column;gap:18px">' +
+    '<div class="card" style="padding:14px 16px;gap:4px"><b style="font-size:18px">' + esc(p.name) + '</b><span class="s13 muted">마지막 물 ' + esc(lastWaterText(st, today)) + '</span></div>' +
+    '<div class="step"><h3>언제 줬어요?</h3><div style="display:flex;flex-wrap:wrap;gap:8px">' +
+    [['0', '오늘'], ['1', '어제'], ['3', '3일 전'], ['7', '일주일 전']].map(function (o) {
+      return '<button type="button" class="pill" data-act="wdate" data-v="' + addDays(today, -(+o[0])) + '">' + o[1] + '</button>';
+    }).join('') + '</div>' +
+    '<div class="field" style="max-width:220px"><label for="w-date">날짜</label><input id="w-date" name="date" type="date" min="' + minD + '" max="' + today + '" value="' + today + '" required></div></div>';
+  var others = plantsSorted(DATA).filter(function (q) { return q.id !== id; });
+  if (others.length) {
+    b += '<div class="step"><h3>같이 준 식물 (선택)</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0 12px">';
+    others.forEach(function (q) { b += '<label class="check"><input type="checkbox" name="also" value="' + esc(q.id) + '">' + esc(q.name) + '</label>'; });
+    b += '</div></div>';
+  }
+  b += '<div class="step"><h3>물 준 뒤 체크</h3>';
+  afterChecks(p).forEach(function (c) { b += '<label class="check"><input type="checkbox" name="chk_' + c.key + '">' + c.label + '</label>'; });
+  b += '</div><div class="field"><label for="w-note">메모 (선택)</label><textarea id="w-note" name="note" style="min-height:70px" placeholder="예: 가게에서 물 주고 왔음"></textarea></div>' +
+    '<p class="small muted" style="margin:0">기록하면 그날 흠뻑 준 것으로 보고 다음 물 예정일을 다시 계산해요. 흙 상태를 모르면 "흙 확인"으로 기록하는 게 더 정확해요.</p></form>';
+  var foot = '<button type="button" class="btn" data-act="close">취소</button><button type="submit" form="water-form" class="btn primary">기록</button>';
+  return sheet('물 줬음 기록', b, foot, 'wt-t');
+}
 function infoSheet(species, key) {
   var sp = SPECIES[species];
   var tab = INFO_TABS.filter(function (t) { return t.key === key; })[0];
@@ -1497,9 +1563,10 @@ function onAct(act, el) {
     return;
   }
   if (act === 'retry-weather') return loadWeather(true);
-  if (act === 'water') {
-    var id = el.getAttribute('data-id');
-    return commit(function (d) { var l = newLog({ plantId: id, type: 'water' }); d.logs[l.id] = l; }, '물 준 것을 기록했어요');
+  if (act === 'wdate') {
+    var wi = document.getElementById('w-date');
+    if (wi) { wi.value = el.getAttribute('data-v'); DIRTY['w-date'] = true; }
+    return;
   }
   if (act === 'del-log') {
     var lid = el.getAttribute('data-id');
@@ -1567,7 +1634,7 @@ function saveCheck(today) {
   scheduleSync();
   var st2 = simulate(p, DATA, buildEnv(DATA, WEATHER), today);
   closeOverlay();
-  toast((v.action === 'water' ? '물 준 것까지 기록했어요' : '기록했어요') + ' · 다음 확인 ' + relDay(st2.next, today));
+  toast((v.action === 'water' ? '물 준 것까지 기록했어요' : '기록했어요') + ' · 다음 물 예정 ' + relDay(st2.next, today));
 }
 function onSubmit(form) {
   var kind = form.getAttribute('data-form');
@@ -1660,6 +1727,25 @@ function onSubmit(form) {
       SYNC.state = 'error'; SYNC.msg = e && e.status ? e.message : '오프라인이거나 GitHub에 연결할 수 없어요';
       updateSyncChip();
     });
+  }
+  if (kind === 'water') {
+    var wid = form.getAttribute('data-id');
+    var wdate = String(fd.get('date') || today);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(wdate) || wdate > today) wdate = today;
+    if (wdate < addDays(today, -90)) return toast('90일 이내 날짜만 기록할 수 있어요');
+    var ids = [wid].concat(fd.getAll('also'));
+    var wchecks = {};
+    ['saucer', 'vent', 'rotate'].forEach(function (k) { if (fd.get('chk_' + k) === 'on') wchecks[k] = true; });
+    var wnote = String(fd.get('note') || '').trim();
+    ids.forEach(function (pid) {
+      if (!DATA.plants[pid] || DATA.plants[pid].deleted) return;
+      var l = newLog({ plantId: pid, type: 'water', date: wdate, checks: wchecks, note: wnote });
+      DATA.logs[l.id] = l;
+    });
+    Store.set(LS.data, DATA); scheduleSync();
+    var stw = simulate(DATA.plants[wid], DATA, buildEnv(DATA, WEATHER), today);
+    closeOverlay();
+    return toast((ids.length > 1 ? ids.length + '그루 ' : '') + '기록했어요 · 다음 물 예정 ' + relDay(stw.next, today));
   }
   if (kind === 'link') {
     var u = String(fd.get('reminderUrl') || '').trim() || '../';
@@ -1789,7 +1875,7 @@ function init() {
   document.addEventListener('pointerup', function () { setTimeout(function () { POINTER_DOWN = false; }, 0); }, true);
   document.addEventListener('pointercancel', function () { POINTER_DOWN = false; }, true);
   document.addEventListener('focusout', function () {
-    setTimeout(function () { if (NEED_RENDER && !isEditing() && !POINTER_DOWN && !/^(edit|spot|info)$/.test(parseRoute().overlay || '')) render(); }, 350);
+    setTimeout(function () { if (NEED_RENDER && !isEditing() && !POINTER_DOWN && !/^(edit|spot|info|water)$/.test(parseRoute().overlay || '')) render(); }, 350);
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && parseRoute().overlay) closeOverlay();
